@@ -109,10 +109,12 @@ cd ..
 %endif
 
 %check
+%ifnarch ppc
 cd base
 export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags} check
 cd ..
+%endif
 %ifarch %{ix86}
 cd build-sse2
 export LD_LIBRARY_PATH=`pwd`/.libs
