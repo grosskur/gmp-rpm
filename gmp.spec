@@ -7,8 +7,8 @@
 
 Summary: A GNU arbitrary precision library.
 Name: gmp
-Version: 4.1.3
-Release: 2
+Version: 4.1.4
+Release: 1
 URL: http://www.swox.com/gmp/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Patch0: gmp-4.0.1-s390.patch
