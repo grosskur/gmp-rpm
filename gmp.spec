@@ -1,10 +1,10 @@
 Summary: A GNU arbitrary precision library.
 Name: gmp
-Version: 3.0.1
-Release: 5
+Version: 3.1.1
+Release: 3
 URL: http://www.gnu.org/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.gz
-Patch: gmp-3.0-sparc64.patch
+Patch: gmp-3.1.1-ia64.patch
 Copyright: LGPL 
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/gmp-root
@@ -57,13 +57,14 @@ cp /usr/share/libtool/config.{sub,guess} .
 	--localstatedir=%{_localstatedir} \
 	--sharedstatedir=%{_sharedstatedir} \
 	--mandir=%{_mandir} \
-	--infodir=%{_infodir}
+	--infodir=%{_infodir} \
+	--enable-mpbsd
 make
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 %{makeinstall}
-gzip ${RPM_BUILD_ROOT}%{_infodir}/gmp.info*
+#gzip ${RPM_BUILD_ROOT}%{_infodir}/gmp.info*
 install -m 644 gmp-mparam.h ${RPM_BUILD_ROOT}%{_includedir}
 
 %post -p /sbin/ldconfig
@@ -85,16 +86,33 @@ fi
 %defattr(-,root,root)
 %doc COPYING NEWS README
 %{_libdir}/libgmp.so.*
+%{_libdir}/libmp.so.*
 
 %files devel
 %defattr(-,root,root)
+%{_libdir}/libmp.so
 %{_libdir}/libgmp.so
+%{_libdir}/libmp.a
 %{_libdir}/libgmp.a
+%{_includedir}/mp.h
 %{_includedir}/gmp.h
 %{_includedir}/gmp-mparam.h
 %{_infodir}/gmp.info*
 
 %changelog
+* Mon Feb 05 2001 Philipp Knirsch <pknirsch@redhat.de>
+- Fixed bugzilla bug #25515 where GMP wouldn't work on IA64 as IA64 is not
+correctly identified as a 64 bit platform.
+
+* Mon Dec 18 2000 Preston Brown <pbrown@redhat.com>
+- include bsd mp library
+
+* Tue Oct 17 2000 Florian La Roche <Florian.LaRoche@redhat.de>
+- update to 3.1.1
+
+* Sun Sep  3 2000 Florian La Roche <Florian.LaRoche@redhat.com>
+- update to 3.1
+
 * Sat Aug 19 2000 Preston Brown <pbrown@redhat.com>
 - devel subpackage depends on main package so that .so symlink is OK.
 
