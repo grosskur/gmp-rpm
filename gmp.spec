@@ -1,9 +1,12 @@
+%define configure  CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; ./configure %{_target_platform}  --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --datadir=%{_datadir}  --libdir=%{_libdir} --mandir=%{_mandir}  --infodir=%{_infodir}
+
 Summary: A GNU arbitrary precision library.
 Name: gmp
-Version: 4.0.1
+Version: 4.1
 Release: 3
 URL: http://www.gnu.org/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
+Patch: gmp-4.0.1-s390.patch
 Copyright: LGPL 
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -36,9 +39,9 @@ install the gmp package.
 
 %prep
 %setup -q
+%patch -p1
 
 %build
-# It's like libtoolize --copy --force, but different... 
 %configure --enable-mpbsd
 make
 
@@ -80,6 +83,21 @@ fi
 %{_infodir}/gmp.info*
 
 %changelog
+* Mon Jul  8 2002 Trond Eivind Glomsrød <teg@redhat.com> 4.1-3
+- Redefine the configure macro, the included configure 
+  script isn't happy about the rpm default one (#68190). Also, make
+  sure the included libtool isn't replaced,
+
+* Fri Jun 21 2002 Tim Powers <timp@redhat.com>
+- automated rebuild
+
+* Sat May 25 2002 Florian La Roche <Florian.LaRoche@redhat.de>
+- update to version 4.1
+- patch s390 gmp-mparam.h to match other archs.
+
+* Thu May 23 2002 Tim Powers <timp@redhat.com>
+- automated rebuild
+
 * Mon Mar 11 2002 Trond Eivind Glomsrød <teg@redhat.com> 4.0.1-3
 - Use standard %%configure macro and edit %%{_tmppath}
 
