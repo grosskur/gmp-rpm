@@ -1,12 +1,12 @@
 Summary: A GNU arbitrary precision library.
 Name: gmp
 Version: 4.0.1
-Release: 2
+Release: 3
 URL: http://www.gnu.org/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Copyright: LGPL 
 Group: System Environment/Libraries
-BuildRoot: %{_tmppath}/gmp-root
+BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
 %description
 The gmp package contains GNU MP, a library for arbitrary precision
@@ -39,24 +39,7 @@ install the gmp package.
 
 %build
 # It's like libtoolize --copy --force, but different... 
-cp /usr/share/libtool/config.{sub,guess} .
-# Slightly adjusted %%configure macro....
-# deleted: --target=%{_target_platform}
-./configure \
-	--prefix=%{_prefix} \
-	--exec-prefix=%{_exec_prefix} \
-	--bindir=%{_bindir} \
-	--sbindir=%{_sbindir} \
-	--sysconfdir=%{_sysconfdir} \
-	--datadir=%{_datadir} \
-	--includedir=%{_includedir} \
-	--libdir=%{_libdir} \
-	--libexecdir=%{_libexecdir} \
-	--localstatedir=%{_localstatedir} \
-	--sharedstatedir=%{_sharedstatedir} \
-	--mandir=%{_mandir} \
-	--infodir=%{_infodir} \
-	--enable-mpbsd
+%configure --enable-mpbsd
 make
 
 %install
@@ -97,6 +80,9 @@ fi
 %{_infodir}/gmp.info*
 
 %changelog
+* Mon Mar 11 2002 Trond Eivind Glomsrød <teg@redhat.com> 4.0.1-3
+- Use standard %%configure macro and edit %%{_tmppath}
+
 * Tue Feb 26 2002 Trond Eivind Glomsrød <teg@redhat.com> 4.0.1-2
 - Rebuild
 
