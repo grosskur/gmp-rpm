@@ -3,11 +3,15 @@
 Summary: A GNU arbitrary precision library.
 Name: gmp
 Version: 4.1
-Release: 3
-URL: http://www.gnu.org/
+Release: 4
+URL: http://www.swox.com/gmp/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
-Patch: gmp-4.0.1-s390.patch
-Copyright: LGPL 
+Patch0: gmp-4.0.1-s390.patch
+Patch1: gmpxx.h.getnum.diff
+Patch2: mpf_inp_str.c.diff
+Patch3: powm_ui.c.41.diff
+Patch4: randraw.c.41.diff
+License: LGPL 
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
@@ -39,7 +43,15 @@ install the gmp package.
 
 %prep
 %setup -q
-%patch -p1
+%patch0 -p1
+%patch1 -p0
+pushd mpf
+%patch2 -p0
+popd
+pushd mpz
+%patch3 -p0
+popd
+%patch4 -p0
 
 %build
 %configure --enable-mpbsd
@@ -83,6 +95,11 @@ fi
 %{_infodir}/gmp.info*
 
 %changelog
+* Mon Jul  8 2002 Trond Eivind Glomsrød <teg@redhat.com> 4.1-4
+- Add 4 patches, among them one for #67918
+- Update URL
+- s/Copyright/License/
+
 * Mon Jul  8 2002 Trond Eivind Glomsrød <teg@redhat.com> 4.1-3
 - Redefine the configure macro, the included configure 
   script isn't happy about the rpm default one (#68190). Also, make
