@@ -2,15 +2,11 @@
 
 Summary: A GNU arbitrary precision library.
 Name: gmp
-Version: 4.1
-Release: 4
+Version: 4.1.2
+Release: 2
 URL: http://www.swox.com/gmp/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Patch0: gmp-4.0.1-s390.patch
-Patch1: gmpxx.h.getnum.diff
-Patch2: mpf_inp_str.c.diff
-Patch3: powm_ui.c.41.diff
-Patch4: randraw.c.41.diff
 License: LGPL 
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -44,14 +40,6 @@ install the gmp package.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p0
-pushd mpf
-%patch2 -p0
-popd
-pushd mpz
-%patch3 -p0
-popd
-%patch4 -p0
 
 %build
 %configure --enable-mpbsd
@@ -61,6 +49,8 @@ make
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 %{makeinstall}
 install -m 644 gmp-mparam.h ${RPM_BUILD_ROOT}%{_includedir}
+rm -f $RPM_BUILD_ROOT%{_libdir}/lib{gmp,mp}.la
+rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 
 %post -p /sbin/ldconfig
 
@@ -95,6 +85,21 @@ fi
 %{_infodir}/gmp.info*
 
 %changelog
+* Wed Jan 22 2003 Tim Powers <timp@redhat.com>
+- rebuilt
+
+* Wed Jan 01 2003 Florian La Roche <Florian.LaRoche@redhat.de>
+- update to 4.1.2
+
+* Tue Dec 03 2002 Florian La Roche <Florian.LaRoche@redhat.de>
+- update to 4.1.1
+- remove un-necessary patches
+- adjust s390/x86_64 patch
+
+* Sun Oct 06 2002 Florian La Roche <Florian.LaRoche@redhat.de>
+- add s390x patch
+- disable current x86-64 support in longlong.h
+
 * Mon Jul  8 2002 Trond Eivind Glomsrød <teg@redhat.com> 4.1-4
 - Add 4 patches, among them one for #67918
 - Update URL
