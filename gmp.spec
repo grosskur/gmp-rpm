@@ -3,13 +3,18 @@
 Summary: A GNU arbitrary precision library.
 Name: gmp
 Version: 4.1.2
-Release: 2
+Release: 9
 URL: http://www.swox.com/gmp/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Patch0: gmp-4.0.1-s390.patch
+Patch1: gmp-4.1.2-ppc64.patch
+Patch2: gmp-4.1.2-autoconf.patch
+Patch3: gmp-fixes.patch
+Patch4: gmp-4.1.2-cxxtests.patch
 License: LGPL 
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
+BuildRequires: automake autoconf libtool
 
 %description
 The gmp package contains GNU MP, a library for arbitrary precision
@@ -40,17 +45,35 @@ install the gmp package.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1 -b .cxxtests
+
+libtoolize --force
+aclocal -I mpn -I mpfr
+automake
+autoconf
 
 %build
-%configure --enable-mpbsd
-make
+if as --help | grep -q execstack; then
+  # the object files do not require an executable stack
+  export CCAS="gcc -c -Wa,--noexecstack"
+fi
+%configure --enable-mpbsd --enable-mpfr --enable-cxx
+make LIBTOOL=/usr/bin/libtool %{?_smp_mflags}
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
-%{makeinstall}
+%{makeinstall} LIBTOOL=/usr/bin/libtool
 install -m 644 gmp-mparam.h ${RPM_BUILD_ROOT}%{_includedir}
-rm -f $RPM_BUILD_ROOT%{_libdir}/lib{gmp,mp}.la
+rm -f $RPM_BUILD_ROOT%{_libdir}/lib{gmp,mp,gmpxx}.la
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+/sbin/ldconfig -n $RPM_BUILD_ROOT%{_libdir}
+ln -sf gmpxx.so.3 $RPM_BUILD_ROOT%{_libdir}/libgmpxx.so
+
+%check
+make %{?_smp_mflags} check
 
 %post -p /sbin/ldconfig
 
@@ -69,22 +92,52 @@ fi
 
 %files
 %defattr(-,root,root)
-%doc COPYING NEWS README
+%doc COPYING COPYING.LIB NEWS README
 %{_libdir}/libgmp.so.*
 %{_libdir}/libmp.so.*
+%{_libdir}/libgmpxx.so.*
 
 %files devel
 %defattr(-,root,root)
 %{_libdir}/libmp.so
 %{_libdir}/libgmp.so
+%{_libdir}/libgmpxx.so
 %{_libdir}/libmp.a
 %{_libdir}/libgmp.a
-%{_includedir}/mp.h
-%{_includedir}/gmp.h
-%{_includedir}/gmp-mparam.h
+%{_libdir}/libgmpxx.a
+%{_libdir}/libmpfr.a
+%{_includedir}/*.h
 %{_infodir}/gmp.info*
+%{_infodir}/mpfr.info*
 
 %changelog
+* Thu Oct 23 2003 Joe Orton <jorton@redhat.com> 4.1.2-9
+- build with -Wa,--noexecstack
+
+* Thu Oct 23 2003 Joe Orton <jorton@redhat.com> 4.1.2-8
+- build assembly code with -Wa,--execstack
+- use parallel make
+- run tests, and fix C++ therein
+
+* Thu Oct 02 2003 Florian La Roche <Florian.LaRoche@redhat.de>
+- enable mpfr  #104395
+- enable cxx  #80195
+- add COPYING.LIB
+- add fixes from gmp web-site
+- remove some cruft patches for older libtool releases
+
+* Wed Jun 04 2003 Elliot Lee <sopwith@redhat.com>
+- rebuilt
+
+* Tue Jun 03 2003 Florian La Roche <Florian.LaRoche@redhat.de>
+- make configure.in work with newer autoconf
+
+* Sun Jun 01 2003 Florian La Roche <Florian.LaRoche@redhat.de>
+- do not set extra_functions for s390x  #92001
+
+* Thu Feb 13 2003 Elliot Lee <sopwith@redhat.com> 4.1.2-3
+- Add ppc64 patch, accompanied by running auto*
+
 * Wed Jan 22 2003 Tim Powers <timp@redhat.com>
 - rebuilt
 

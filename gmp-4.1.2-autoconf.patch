@@ -1,0 +1,17 @@
+--- gmp-4.1.2/configure.in.lr	2003-06-03 09:48:52.000000000 +0200
++++ gmp-4.1.2/configure.in	2003-06-03 09:49:39.000000000 +0200
+@@ -1338,11 +1338,11 @@
+ 
+ 
+ # The C++ compiler, if desired.
++test_CXXFLAGS=${CXXFLAGS+set}
++AC_PROG_CXX
++
+ want_cxx=no
+ if test $enable_cxx != no; then
+-  test_CXXFLAGS=${CXXFLAGS+set}
+-  AC_PROG_CXX
+-
+   echo "CXXFLAGS chosen by autoconf: $CXXFLAGS" >&AC_FD_CC
+   cxxflags_ac_prog_cxx=$CXXFLAGS
+   cxxflags_list=ac_prog_cxx
