@@ -1,9 +1,14 @@
+#
+# Important for %{ix86}:
+# This rpm has to be build on a CPU with sse2 support like Pentium 4 !
+#
+
 %define configure  CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; ./configure %{_target_platform}  --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --datadir=%{_datadir}  --libdir=%{_libdir} --mandir=%{_mandir}  --infodir=%{_infodir}
 
 Summary: A GNU arbitrary precision library.
 Name: gmp
 Version: 4.1.2
-Release: 13
+Release: 14
 URL: http://www.swox.com/gmp/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Patch0: gmp-4.0.1-s390.patch
@@ -64,7 +69,9 @@ mkdir base
 cd base
 ln -s ../configure .
 %configure --enable-mpbsd --enable-mpfr --enable-cxx
-make LIBTOOL=/usr/bin/libtool %{?_smp_mflags}
+perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
+export LD_LIBRARY_PATH=`pwd`/.libs
+make %{?_smp_mflags}
 cd ..
 %ifarch %{ix86}
 mkdir build-sse2
@@ -72,14 +79,17 @@ cd build-sse2
 ln -s ../configure .
 CFLAGS="-O2 -g -march=pentium4"
 %configure --enable-mpbsd --enable-mpfr --enable-cxx pentium4-redhat-linux
-make LIBTOOL=/usr/bin/libtool %{?_smp_mflags}
+perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
+export LD_LIBRARY_PATH=`pwd`/.libs
+make %{?_smp_mflags}
 cd ..
 %endif
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 cd base
-%{makeinstall} LIBTOOL=/usr/bin/libtool
+export LD_LIBRARY_PATH=`pwd`/.libs
+%{makeinstall}
 install -m 644 gmp-mparam.h ${RPM_BUILD_ROOT}%{_includedir}
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib{gmp,mp,gmpxx}.la
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
@@ -88,6 +98,7 @@ ln -sf libgmpxx.so.3 $RPM_BUILD_ROOT%{_libdir}/libgmpxx.so
 cd ..
 %ifarch %{ix86}
 cd build-sse2
+export LD_LIBRARY_PATH=`pwd`/.libs
 mkdir $RPM_BUILD_ROOT%{_libdir}/sse2
 install -m 644 .libs/libgmp.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
 cp -a .libs/libgmp.so.3 $RPM_BUILD_ROOT%{_libdir}/sse2
@@ -103,10 +114,12 @@ cd ..
 
 %check
 cd base
+export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags} check
 cd ..
 %ifarch %{ix86}
 cd build-sse2
+export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags} check
 cd ..
 %endif
@@ -150,6 +163,9 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Wed Mar 31 2004 Thomas Woerner <twoerner@redhat.com> 4.1.2-14
+- dropped RPATH (#118506)
+
 * Sat Mar 06 2004 Florian La Roche <Florian.LaRoche@redhat.de>
 - also build SSE2 DSOs, patch from Ulrich Drepper
 
