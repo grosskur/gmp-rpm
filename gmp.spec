@@ -1,7 +1,7 @@
 Summary: A GNU arbitrary precision library.
 Name: gmp
 Version: 3.1.1
-Release: 3
+Release: 4
 URL: http://www.gnu.org/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.gz
 Patch: gmp-3.1.1-ia64.patch
@@ -100,6 +100,9 @@ fi
 %{_infodir}/gmp.info*
 
 %changelog
+* Sun Jun 24 2001 Elliot Lee <sopwith@redhat.com>
+- Bump release + rebuild.
+
 * Mon Feb 05 2001 Philipp Knirsch <pknirsch@redhat.de>
 - Fixed bugzilla bug #25515 where GMP wouldn't work on IA64 as IA64 is not
 correctly identified as a 64 bit platform.
