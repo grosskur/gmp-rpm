@@ -3,7 +3,7 @@
 Summary: A GNU arbitrary precision library.
 Name: gmp
 Version: 4.1.2
-Release: 11
+Release: 13
 URL: http://www.swox.com/gmp/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Patch0: gmp-4.0.1-s390.patch
@@ -60,20 +60,56 @@ if as --help | grep -q execstack; then
   # the object files do not require an executable stack
   export CCAS="gcc -c -Wa,--noexecstack"
 fi
+mkdir base
+cd base
+ln -s ../configure .
 %configure --enable-mpbsd --enable-mpfr --enable-cxx
 make LIBTOOL=/usr/bin/libtool %{?_smp_mflags}
+cd ..
+%ifarch %{ix86}
+mkdir build-sse2
+cd build-sse2
+ln -s ../configure .
+CFLAGS="-O2 -g -march=pentium4"
+%configure --enable-mpbsd --enable-mpfr --enable-cxx pentium4-redhat-linux
+make LIBTOOL=/usr/bin/libtool %{?_smp_mflags}
+cd ..
+%endif
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+cd base
 %{makeinstall} LIBTOOL=/usr/bin/libtool
 install -m 644 gmp-mparam.h ${RPM_BUILD_ROOT}%{_includedir}
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib{gmp,mp,gmpxx}.la
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 /sbin/ldconfig -n $RPM_BUILD_ROOT%{_libdir}
 ln -sf libgmpxx.so.3 $RPM_BUILD_ROOT%{_libdir}/libgmpxx.so
+cd ..
+%ifarch %{ix86}
+cd build-sse2
+mkdir $RPM_BUILD_ROOT%{_libdir}/sse2
+install -m 644 .libs/libgmp.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
+cp -a .libs/libgmp.so.3 $RPM_BUILD_ROOT%{_libdir}/sse2
+chmod 644 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmp.so.3
+install -m 644 .libs/libgmpxx.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
+cp -a .libs/libgmpxx.so.3 $RPM_BUILD_ROOT%{_libdir}/sse2
+chmod 644 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmpxx.so.3
+install -m 644 .libs/libmp.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
+cp -a .libs/libmp.so.3 $RPM_BUILD_ROOT%{_libdir}/sse2
+chmod 644 $RPM_BUILD_ROOT%{_libdir}/sse2/libmp.so.3
+cd ..
+%endif
 
 %check
+cd base
 make %{?_smp_mflags} check
+cd ..
+%ifarch %{ix86}
+cd build-sse2
+make %{?_smp_mflags} check
+cd ..
+%endif
 
 %post -p /sbin/ldconfig
 
@@ -96,6 +132,9 @@ fi
 %{_libdir}/libgmp.so.*
 %{_libdir}/libmp.so.*
 %{_libdir}/libgmpxx.so.*
+%ifarch %{ix86}
+%{_libdir}/sse2/*
+%endif
 
 %files devel
 %defattr(-,root,root)
@@ -111,6 +150,15 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Sat Mar 06 2004 Florian La Roche <Florian.LaRoche@redhat.de>
+- also build SSE2 DSOs, patch from Ulrich Drepper
+
+* Tue Mar 02 2004 Elliot Lee <sopwith@redhat.com>
+- rebuilt
+
+* Fri Feb 13 2004 Elliot Lee <sopwith@redhat.com>
+- rebuilt
+
 * Thu Jan 29 2004 Thomas Woerner <twoerner@redhat.com> 4.1.2-11
 - BuildRequires for automake16
 
