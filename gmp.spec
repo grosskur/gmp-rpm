@@ -7,15 +7,13 @@
 
 Summary: A GNU arbitrary precision library.
 Name: gmp
-Version: 4.1.2
-Release: 14
+Version: 4.1.3
+Release: 1
 URL: http://www.swox.com/gmp/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Patch0: gmp-4.0.1-s390.patch
 Patch1: gmp-4.1.2-ppc64.patch
 Patch2: gmp-4.1.2-autoconf.patch
-Patch3: gmp-fixes.patch
-Patch4: gmp-4.1.2-cxxtests.patch
 License: LGPL 
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -52,8 +50,6 @@ install the gmp package.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1 -b .cxxtests
 
 libtoolize --force
 aclocal-1.6 -I mpn -I mpfr
@@ -163,6 +159,9 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Mon May 24 2004 Thomas Woerner <twoerner@redhat.com> 4.1.3-1
+- new version 4.1.3
+
 * Wed Mar 31 2004 Thomas Woerner <twoerner@redhat.com> 4.1.2-14
 - dropped RPATH (#118506)
 
