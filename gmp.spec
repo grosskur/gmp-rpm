@@ -48,7 +48,7 @@ install the gmp package.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
+#patch1 -p1
 %patch2 -p1
 
 libtoolize --force
@@ -159,6 +159,10 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Sun Sep 26 2004 Florian La Roche <Florian.LaRoche@redhat.de>
+- 4.1.4
+- disable ppc64 patch, now fixed upstream
+
 * Tue Jun 15 2004 Elliot Lee <sopwith@redhat.com>
 - rebuilt
 
