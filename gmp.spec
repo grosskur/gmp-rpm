@@ -3,7 +3,7 @@
 Summary: A GNU arbitrary precision library.
 Name: gmp
 Version: 4.1.2
-Release: 9
+Release: 11
 URL: http://www.swox.com/gmp/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Patch0: gmp-4.0.1-s390.patch
@@ -14,7 +14,7 @@ Patch4: gmp-4.1.2-cxxtests.patch
 License: LGPL 
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildRequires: automake autoconf libtool
+BuildRequires: automake16 autoconf libtool
 
 %description
 The gmp package contains GNU MP, a library for arbitrary precision
@@ -51,8 +51,8 @@ install the gmp package.
 %patch4 -p1 -b .cxxtests
 
 libtoolize --force
-aclocal -I mpn -I mpfr
-automake
+aclocal-1.6 -I mpn -I mpfr
+automake-1.6
 autoconf
 
 %build
@@ -70,7 +70,7 @@ install -m 644 gmp-mparam.h ${RPM_BUILD_ROOT}%{_includedir}
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib{gmp,mp,gmpxx}.la
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 /sbin/ldconfig -n $RPM_BUILD_ROOT%{_libdir}
-ln -sf gmpxx.so.3 $RPM_BUILD_ROOT%{_libdir}/libgmpxx.so
+ln -sf libgmpxx.so.3 $RPM_BUILD_ROOT%{_libdir}/libgmpxx.so
 
 %check
 make %{?_smp_mflags} check
@@ -111,6 +111,13 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Thu Jan 29 2004 Thomas Woerner <twoerner@redhat.com> 4.1.2-11
+- BuildRequires for automake16
+
+* Mon Dec 01 2003 Florian La Roche <Florian.LaRoche@redhat.de>
+- fix symlink to libgmpxx.so.3  #111135
+- add patch to factorize.c from gmp homepage
+
 * Thu Oct 23 2003 Joe Orton <jorton@redhat.com> 4.1.2-9
 - build with -Wa,--noexecstack
 
