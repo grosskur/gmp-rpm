@@ -1,10 +1,9 @@
 Summary: A GNU arbitrary precision library.
 Name: gmp
-Version: 3.1.1
-Release: 4
+Version: 4.0.1
+Release: 2
 URL: http://www.gnu.org/
-Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.gz
-Patch: gmp-3.1.1-ia64.patch
+Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Copyright: LGPL 
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/gmp-root
@@ -37,14 +36,13 @@ install the gmp package.
 
 %prep
 %setup -q
-%patch -p1
 
 %build
 # It's like libtoolize --copy --force, but different... 
 cp /usr/share/libtool/config.{sub,guess} .
 # Slightly adjusted %%configure macro....
+# deleted: --target=%{_target_platform}
 ./configure \
-	--target=%{_target_platform} \
 	--prefix=%{_prefix} \
 	--exec-prefix=%{_exec_prefix} \
 	--bindir=%{_bindir} \
@@ -64,7 +62,6 @@ make
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 %{makeinstall}
-#gzip ${RPM_BUILD_ROOT}%{_infodir}/gmp.info*
 install -m 644 gmp-mparam.h ${RPM_BUILD_ROOT}%{_includedir}
 
 %post -p /sbin/ldconfig
@@ -100,6 +97,16 @@ fi
 %{_infodir}/gmp.info*
 
 %changelog
+* Tue Feb 26 2002 Trond Eivind Glomsrød <teg@redhat.com> 4.0.1-2
+- Rebuild
+
+* Tue Jan 22 2002 Florian La Roche <Florian.LaRoche@redhat.de>
+- update to 4.0.1
+- bzip2 src
+
+* Wed Jan 09 2002 Tim Powers <timp@redhat.com>
+- automated rebuild
+
 * Sun Jun 24 2001 Elliot Lee <sopwith@redhat.com>
 - Bump release + rebuild.
 
