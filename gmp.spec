@@ -8,12 +8,13 @@
 Summary: A GNU arbitrary precision library.
 Name: gmp
 Version: 4.1.4
-Release: 5
+Release: 6
 URL: http://www.swox.com/gmp/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Patch0: gmp-4.0.1-s390.patch
 Patch1: gmp-4.1.2-ppc64.patch
 Patch2: gmp-4.1.2-autoconf.patch
+Patch3: gmp-4.1.4-fpu.patch
 License: LGPL 
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -50,6 +51,7 @@ install the gmp package.
 %patch0 -p1
 #patch1 -p1
 %patch2 -p1
+%patch3 -p1 -b .fpu
 
 libtoolize --force
 aclocal-1.6 -I mpn -I mpfr
@@ -161,6 +163,9 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Mon Apr 18 2005 Thomas Woerner <twoerner@redhat.com> 4.1.4-6
+- fixed __setfpucw call in mpfr-test.h
+
 * Wed Mar 02 2005 Karsten Hopp <karsten@redhat.de> 4.1.4-5
 - build with gcc-4
 

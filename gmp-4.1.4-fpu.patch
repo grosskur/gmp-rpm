@@ -1,0 +1,15 @@
+--- gmp-4.1.4/mpfr/mpfr-test.h.fpu	2002-04-19 23:41:05.000000000 +0200
++++ gmp-4.1.4/mpfr/mpfr-test.h	2005-04-18 16:04:20.000000000 +0200
+@@ -98,7 +98,11 @@
+ 
+ #ifdef HAVE_SETFPUCW
+   /* sets the precision to double */
+-  __setfpucw((_FPU_DEFAULT & (~_FPU_EXTENDED)) | _FPU_DOUBLE);
++  fpu_control_t cw;
++  _FPU_GETCW(cw);
++  cw &= ~_FPU_EXTENDED;
++  cw |= _FPU_DOUBLE;
++  _FPU_SETCW(cw);
+ #endif
+ }
+ 
