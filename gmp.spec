@@ -8,7 +8,7 @@
 Summary: A GNU arbitrary precision library.
 Name: gmp
 Version: 4.1.4
-Release: 6.2
+Release: 6.2.1
 URL: http://www.swox.com/gmp/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Patch0: gmp-4.0.1-s390.patch
@@ -163,6 +163,9 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Fri Feb 10 2006 Jesse Keating <jkeating@redhat.com> - 4.1.4-6.2.1
+- bump again for double-long bug on ppc(64)
+
 * Tue Feb 07 2006 Jesse Keating <jkeating@redhat.com> - 4.1.4-6.2
 - rebuilt for new gcc4.1 snapshot and glibc changes
 
