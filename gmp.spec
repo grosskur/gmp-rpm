@@ -137,7 +137,7 @@ fi
 %{_libdir}/libmp.so.*
 %{_libdir}/libgmpxx.so.*
 %ifarch %{ix86}
-%{_libdir}/sse2/libgmp*
+%{_libdir}/sse2/lib*
 %endif
 
 %files devel
@@ -152,7 +152,7 @@ fi
 %{_infodir}/gmp.info*
 
 %changelog
-* Thu Jun  8 2006 Thomas Woerner <twoerner@redhat.com> 4.2.1-1
+* Fri Jun  9 2006 Thomas Woerner <twoerner@redhat.com> 4.2.1-1
 - new version 4.2.1
 - mpfr moved out of gmp
 
