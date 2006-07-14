@@ -7,16 +7,18 @@
 
 Summary: A GNU arbitrary precision library.
 Name: gmp
-Version: 4.2.1
-Release: 1.1
+Version: 4.1.4
+Release: 6.2.1
 URL: http://www.swox.com/gmp/
 Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Patch0: gmp-4.0.1-s390.patch
+Patch1: gmp-4.1.2-ppc64.patch
 Patch2: gmp-4.1.2-autoconf.patch
+Patch3: gmp-4.1.4-fpu.patch
 License: LGPL 
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildRequires: libtool
+BuildRequires: automake16 autoconf libtool
 
 %description
 The gmp package contains GNU MP, a library for arbitrary precision
@@ -33,7 +35,7 @@ library.
 %package devel
 Summary: Development tools for the GNU MP arbitrary precision library.
 Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
+Requires: %{name} = %{version}
 PreReq: /sbin/install-info
 
 %description devel
@@ -47,17 +49,24 @@ install the gmp package.
 %prep
 %setup -q
 %patch0 -p1
+#patch1 -p1
 %patch2 -p1
+%patch3 -p1 -b .fpu
+
+libtoolize --force
+aclocal-1.6 -I mpn -I mpfr
+automake-1.6
+autoconf
 
 %build
 if as --help | grep -q execstack; then
   # the object files do not require an executable stack
   export CCAS="gcc -c -Wa,--noexecstack"
 fi
-mkdir build
-cd build
+mkdir base
+cd base
 ln -s ../configure .
-%configure --enable-mpbsd --disable-mpfr --enable-cxx
+%configure --enable-mpbsd --enable-mpfr --enable-cxx
 perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
 export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags}
@@ -67,7 +76,7 @@ mkdir build-sse2
 cd build-sse2
 ln -s ../configure .
 CFLAGS="-O2 -g -march=pentium4"
-%configure --enable-mpbsd --disable-mpfr --enable-cxx pentium4-redhat-linux
+%configure --enable-mpbsd --enable-mpfr --enable-cxx pentium4-redhat-linux
 perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
 export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags}
@@ -76,7 +85,7 @@ cd ..
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
-cd build
+cd base
 export LD_LIBRARY_PATH=`pwd`/.libs
 %{makeinstall}
 install -m 644 gmp-mparam.h ${RPM_BUILD_ROOT}%{_includedir}
@@ -103,7 +112,7 @@ cd ..
 
 %check
 %ifnarch ppc
-cd build
+cd base
 export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags} check
 cd ..
@@ -120,11 +129,11 @@ cd ..
 %postun -p /sbin/ldconfig
 
 %post devel
-/sbin/install-info --info-dir=%{_infodir} %{_infodir}/gmp.info.*
+/sbin/install-info %{_infodir}/gmp.info.gz %{_infodir}/dir
 
 %preun devel
 if [ "$1" = 0 ]; then
-	/sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gmp.info.*
+	/sbin/install-info --delete %{_infodir}/gmp.info.gz %{_infodir}/dir
 fi
 
 %clean
@@ -137,7 +146,7 @@ fi
 %{_libdir}/libmp.so.*
 %{_libdir}/libgmpxx.so.*
 %ifarch %{ix86}
-%{_libdir}/sse2/lib*
+%{_libdir}/sse2/*
 %endif
 
 %files devel
@@ -148,17 +157,12 @@ fi
 %{_libdir}/libmp.a
 %{_libdir}/libgmp.a
 %{_libdir}/libgmpxx.a
+%{_libdir}/libmpfr.a
 %{_includedir}/*.h
 %{_infodir}/gmp.info*
+%{_infodir}/mpfr.info*
 
 %changelog
-* Wed Jul 12 2006 Jesse Keating <jkeating@redhat.com> - 4.2.1-1.1
-- rebuild
-
-* Fri Jun  9 2006 Thomas Woerner <twoerner@redhat.com> 4.2.1-1
-- new version 4.2.1
-- mpfr moved out of gmp
-
 * Fri Feb 10 2006 Jesse Keating <jkeating@redhat.com> - 4.1.4-6.2.1
 - bump again for double-long bug on ppc(64)
 
