@@ -4,17 +4,21 @@
 #
 
 %define configure  CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; ./configure %{_target_platform}  --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --datadir=%{_datadir}  --libdir=%{_libdir} --mandir=%{_mandir}  --infodir=%{_infodir}
+%define mpfr_version 2.2.0
 
 Summary: A GNU arbitrary precision library.
 Name: gmp
 Version: 4.1.4
-Release: 7
+Release: 8
 URL: http://www.swox.com/gmp/
-Source: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
+Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
+Source1: http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
 Patch0: gmp-4.0.1-s390.patch
 Patch1: gmp-4.1.2-ppc64.patch
 Patch2: gmp-4.1.2-autoconf.patch
 Patch3: gmp-4.1.4-fpu.patch
+# http://www.mpfr.org/mpfr-%{mpfr_version}/patches
+Patch4: mpfr-2.2.0-cumulative.patch
 License: LGPL 
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -47,11 +51,14 @@ you'll need to install the gmp-devel package.  You'll also need to
 install the gmp package.
 
 %prep
-%setup -q
+%setup -q -a1
 %patch0 -p1
 #patch1 -p1
 %patch2 -p1
 %patch3 -p1 -b .fpu
+cd mpfr-%{mpfr_version}
+%patch4 -p1
+cd ..
 
 libtoolize --force
 aclocal-1.6 -I mpn -I mpfr
@@ -66,7 +73,7 @@ fi
 mkdir base
 cd base
 ln -s ../configure .
-%configure --enable-mpbsd --enable-mpfr --enable-cxx
+%configure --enable-mpbsd --disable-mpfr --enable-cxx
 perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
 export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags}
@@ -82,6 +89,13 @@ export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags}
 cd ..
 %endif
+cd mpfr-%{mpfr_version}
+# XXX Apparently mpfr doesn't support separate build dir
+ln -s ../gmp-impl.h ../base/
+ln -s ../longlong.h ../base/
+%configure --disable-assert --with-gmp-build=`cd ../base; pwd`
+make %{?_smp_mflags}
+cd ..
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
@@ -109,6 +123,12 @@ cp -a .libs/libmp.so.3 $RPM_BUILD_ROOT%{_libdir}/sse2
 chmod 644 $RPM_BUILD_ROOT%{_libdir}/sse2/libmp.so.3
 cd ..
 %endif
+cd mpfr-%{mpfr_version}
+%{makeinstall}
+rm -f $RPM_BUILD_ROOT%{_libdir}/libmpfr.la
+install -m 644 ../mpfrxx.h $RPM_BUILD_ROOT%{_includedir}
+rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+cd ..
 
 %check
 %ifnarch ppc
@@ -123,6 +143,9 @@ export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags} check
 cd ..
 %endif
+cd mpfr-%{mpfr_version}
+make %{?_smp_mflags} check
+cd ..
 
 %post -p /sbin/ldconfig
 
@@ -163,7 +186,11 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
-* Fri Jul 14 2006 Thomas Woerner <twoerner@redhat.com>- 4.1.4-7
+* Thu Oct 26 2006 Jakub Jelinek <jakub@redhat.com> - 4.1.4-8
+- upgrade mpfr to 2.2.0 (#211971)
+- apply mpfr 2.2.0 cumulative patch
+
+* Fri Jul 14 2006 Thomas Woerner <twoerner@redhat.com> - 4.1.4-7
 - release bump
 
 * Fri Feb 10 2006 Jesse Keating <jkeating@redhat.com> - 4.1.4-6.2.1
