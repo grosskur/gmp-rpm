@@ -9,10 +9,12 @@
 Summary: A GNU arbitrary precision library.
 Name: gmp
 Version: 4.1.4
-Release: 8
+Release: 9
 URL: http://www.swox.com/gmp/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source1: http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
+Source2: gmp.h
+Source3: gmp-mparam.h
 Patch0: gmp-4.0.1-s390.patch
 Patch1: gmp-4.1.2-ppc64.patch
 Patch2: gmp-4.1.2-autoconf.patch
@@ -130,6 +132,22 @@ install -m 644 ../mpfrxx.h $RPM_BUILD_ROOT%{_includedir}
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 cd ..
 
+# Rename gmp.h to gmp-<arch>.h and gmp-mparam.h to gmp-mparam-<arch>.h to 
+# avoid file conflicts on multilib systems and install wrapper include files
+# gmp.h and gmp-mparam-<arch>.h
+basearch=%{_arch}
+# always use i386 for iX86
+%ifarch %{ix86}
+basearch=i386
+%endif
+# Rename files and install wrappers
+
+mv %{buildroot}/%{_includedir}/gmp.h %{buildroot}/%{_includedir}/gmp-${basearch}.h
+install -m644 %{SOURCE2} %{buildroot}/%{_includedir}/gmp.h
+mv %{buildroot}/%{_includedir}/gmp-mparam.h %{buildroot}/%{_includedir}/gmp-mparam-${basearch}.h
+install -m644 %{SOURCE3} %{buildroot}/%{_includedir}/gmp-mparam.h
+
+
 %check
 %ifnarch ppc
 cd base
@@ -186,6 +204,9 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Fri Oct 27 2006 Thomas Woerner <twoerner@redhat.com> - 4.1.4-9
+- fixed multilib devel conflicts for gmp (#212286)
+
 * Thu Oct 26 2006 Jakub Jelinek <jakub@redhat.com> - 4.1.4-8
 - upgrade mpfr to 2.2.0 (#211971)
 - apply mpfr 2.2.0 cumulative patch
