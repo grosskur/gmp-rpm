@@ -9,7 +9,7 @@
 Summary: A GNU arbitrary precision library.
 Name: gmp
 Version: 4.1.4
-Release: 9
+Release: 10
 URL: http://www.swox.com/gmp/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source1: http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
@@ -204,6 +204,9 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Thu Nov  2 2006 Joe Orton <jorton@redhat.com> 4.1.4-10
+- include ppc64 header on ppc64 not ppc header
+
 * Fri Oct 27 2006 Thomas Woerner <twoerner@redhat.com> - 4.1.4-9
 - fixed multilib devel conflicts for gmp (#212286)
 
