@@ -204,6 +204,9 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Thu Nov  2 2006 Thomas Woerner <twoerner@redhat.com> 4.1.4-10
+- fixed arch order in gmp.h and gmp-mparam.h wrapper for all architectures
+
 * Thu Nov  2 2006 Joe Orton <jorton@redhat.com> 4.1.4-10
 - include ppc64 header on ppc64 not ppc header
 

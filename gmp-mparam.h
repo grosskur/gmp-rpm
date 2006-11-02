@@ -36,18 +36,18 @@ MA 02111-1307, USA. */
 
 #if defined(__i386__)
 #include "gmp-mparam-i386.h"
-#elif defined(__x86_64__)
-#include "gmp-mparam-x86_64.h"
+#elif defined(__ia64__)
+#include "gmp-mparam-ia64.h"
 #elif defined(__powerpc64__)
 #include "gmp-mparam-ppc64.h"
 #elif defined(__powerpc__)
 #include "gmp-mparam-ppc.h"
-#elif defined(__s390__)
-#include "gmp-mparam-s390.h"
 #elif defined(__s390x__)
 #include "gmp-mparam-s390x.h"
-#elif defined(__ia64__)
-#include "gmp-mparam-ia64.h"
+#elif defined(__s390__)
+#include "gmp-mparam-s390.h"
+#elif defined(__x86_64__)
+#include "gmp-mparam-x86_64.h"
 #else
 #error "The gmp-devel package is not usable with the architecture."
 #endif
