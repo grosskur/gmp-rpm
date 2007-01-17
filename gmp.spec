@@ -4,12 +4,12 @@
 #
 
 %define configure  CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; ./configure %{_target_platform}  --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --datadir=%{_datadir}  --libdir=%{_libdir} --mandir=%{_mandir}  --infodir=%{_infodir}
-%define mpfr_version 2.2.0
+%define mpfr_version 2.2.1
 
 Summary: A GNU arbitrary precision library.
 Name: gmp
 Version: 4.1.4
-Release: 10
+Release: 11
 URL: http://www.swox.com/gmp/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source1: http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
@@ -20,7 +20,7 @@ Patch1: gmp-4.1.2-ppc64.patch
 Patch2: gmp-4.1.2-autoconf.patch
 Patch3: gmp-4.1.4-fpu.patch
 # http://www.mpfr.org/mpfr-%{mpfr_version}/patches
-Patch4: mpfr-2.2.0-cumulative.patch
+#Patch4: mpfr-%{mpfr_version}-cumulative.patch
 License: LGPL 
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -58,9 +58,9 @@ install the gmp package.
 #patch1 -p1
 %patch2 -p1
 %patch3 -p1 -b .fpu
-cd mpfr-%{mpfr_version}
-%patch4 -p1
-cd ..
+#cd mpfr-%{mpfr_version}
+#%patch4 -p1
+#cd ..
 
 libtoolize --force
 aclocal-1.6 -I mpn -I mpfr
@@ -84,11 +84,12 @@ cd ..
 mkdir build-sse2
 cd build-sse2
 ln -s ../configure .
-CFLAGS="-O2 -g -march=pentium4"
-%configure --enable-mpbsd --enable-mpfr --enable-cxx pentium4-redhat-linux
+CFLAGS="%{optflags} -march=pentium4"
+%configure --enable-mpbsd --disable-mpfr --enable-cxx pentium4-redhat-linux
 perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
 export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags}
+unset CFLAGS
 cd ..
 %endif
 cd mpfr-%{mpfr_version}
@@ -204,6 +205,10 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Wed Jan 17 2007 Jakub Jelinek <jakub@redhat.com> 4.1.4-11
+- make sure libmpfr.a doesn't contain SSE2 instructions on i?86 (#222371)
+- rebase to mpfr 2.2.1 from 2.2.0 + cumulative fixes
+
 * Thu Nov  2 2006 Thomas Woerner <twoerner@redhat.com> 4.1.4-10
 - fixed arch order in gmp.h and gmp-mparam.h wrapper for all architectures
 
