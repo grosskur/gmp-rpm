@@ -6,10 +6,10 @@
 %define configure  CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; ./configure %{_target_platform}  --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --datadir=%{_datadir}  --libdir=%{_libdir} --mandir=%{_mandir}  --infodir=%{_infodir}
 %define mpfr_version 2.2.1
 
-Summary: A GNU arbitrary precision library.
+Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.1.4
-Release: 11
+Release: 12
 URL: http://www.swox.com/gmp/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source1: http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
@@ -23,8 +23,10 @@ Patch3: gmp-4.1.4-fpu.patch
 #Patch4: mpfr-%{mpfr_version}-cumulative.patch
 License: LGPL 
 Group: System Environment/Libraries
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: automake16 autoconf libtool
+Requires(post): /sbin/ldconfig
+Requires(postun): /sbin/ldconfig
 
 %description
 The gmp package contains GNU MP, a library for arbitrary precision
@@ -39,10 +41,11 @@ Install the gmp package if you need a fast arbitrary precision
 library.
 
 %package devel
-Summary: Development tools for the GNU MP arbitrary precision library.
+Summary: Development tools for the GNU MP arbitrary precision library
 Group: Development/Libraries
 Requires: %{name} = %{version}
-PreReq: /sbin/install-info
+Requires(post): /sbin/install-info
+Requires(preun): /sbin/install-info
 
 %description devel
 The static libraries, header files and documentation for using the GNU
@@ -104,7 +107,7 @@ cd ..
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 cd base
 export LD_LIBRARY_PATH=`pwd`/.libs
-%{makeinstall}
+make install DESTDIR=$RPM_BUILD_ROOT
 install -m 644 gmp-mparam.h ${RPM_BUILD_ROOT}%{_includedir}
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib{gmp,mp,gmpxx}.la
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
@@ -127,7 +130,7 @@ chmod 644 $RPM_BUILD_ROOT%{_libdir}/sse2/libmp.so.3
 cd ..
 %endif
 cd mpfr-%{mpfr_version}
-%{makeinstall}
+make install DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_libdir}/libmpfr.la
 install -m 644 ../mpfrxx.h $RPM_BUILD_ROOT%{_includedir}
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
@@ -175,14 +178,14 @@ cd ..
 
 %preun devel
 if [ "$1" = 0 ]; then
-	/sbin/install-info --delete %{_infodir}/gmp.info.gz %{_infodir}/dir
+    /sbin/install-info --delete %{_infodir}/gmp.info.gz %{_infodir}/dir
 fi
 
 %clean
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root)
+%defattr(-,root,root,-)
 %doc COPYING COPYING.LIB NEWS README
 %{_libdir}/libgmp.so.*
 %{_libdir}/libmp.so.*
@@ -192,7 +195,7 @@ fi
 %endif
 
 %files devel
-%defattr(-,root,root)
+%defattr(-,root,root,-)
 %{_libdir}/libmp.so
 %{_libdir}/libgmp.so
 %{_libdir}/libgmpxx.so
@@ -205,6 +208,14 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Fri Feb 23 2007 Karsten Hopp <karsten@redhat.com> 4.1.4-12
+- remove trailing dot from summary
+- fix buildroot
+- fix post/postun/... requirements
+- use make install DESTDIR=...
+- replace tabs with spaces
+- convert changelog to utf-8
+
 * Wed Jan 17 2007 Jakub Jelinek <jakub@redhat.com> 4.1.4-11
 - make sure libmpfr.a doesn't contain SSE2 instructions on i?86 (#222371)
 - rebase to mpfr 2.2.1 from 2.2.0 + cumulative fixes
@@ -314,12 +325,12 @@ fi
 - add s390x patch
 - disable current x86-64 support in longlong.h
 
-* Mon Jul  8 2002 Trond Eivind Glomsrød <teg@redhat.com> 4.1-4
+* Mon Jul  8 2002 Trond Eivind GlomsrÃ¸d <teg@redhat.com> 4.1-4
 - Add 4 patches, among them one for #67918
 - Update URL
 - s/Copyright/License/
 
-* Mon Jul  8 2002 Trond Eivind Glomsrød <teg@redhat.com> 4.1-3
+* Mon Jul  8 2002 Trond Eivind GlomsrÃ¸d <teg@redhat.com> 4.1-3
 - Redefine the configure macro, the included configure 
   script isn't happy about the rpm default one (#68190). Also, make
   sure the included libtool isn't replaced,
@@ -334,10 +345,10 @@ fi
 * Thu May 23 2002 Tim Powers <timp@redhat.com>
 - automated rebuild
 
-* Mon Mar 11 2002 Trond Eivind Glomsrød <teg@redhat.com> 4.0.1-3
+* Mon Mar 11 2002 Trond Eivind GlomsrÃ¸d <teg@redhat.com> 4.0.1-3
 - Use standard %%configure macro and edit %%{_tmppath}
 
-* Tue Feb 26 2002 Trond Eivind Glomsrød <teg@redhat.com> 4.0.1-2
+* Tue Feb 26 2002 Trond Eivind GlomsrÃ¸d <teg@redhat.com> 4.0.1-2
 - Rebuild
 
 * Tue Jan 22 2002 Florian La Roche <Florian.LaRoche@redhat.de>
