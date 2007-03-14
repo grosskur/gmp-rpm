@@ -9,7 +9,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.1.4
-Release: 12.1
+Release: 12.2
 URL: http://www.swox.com/gmp/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source1: http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
@@ -208,6 +208,9 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Wed Mar 14 2007 Karsten Hopp <karsten@redhat.com> 4.1.4-12.2
+- fix typo
+
 * Wed Mar 14 2007 Thomas Woerner <twoerner@redhat.com> 4.1.4-12.1
 - added alpha support for gmp.h and gmp-mparam.h wrappers
 

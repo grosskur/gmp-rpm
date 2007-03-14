@@ -48,7 +48,7 @@ MA 02111-1307, USA. */
 #include "gmp-mparam-s390.h"
 #elif defined(__x86_64__)
 #include "gmp-mparam-x86_64.h"
-#elif defiend(__alpha__)
+#elif defined(__alpha__)
 #include "gmp-mparam-alpha.h"
 #else
 #error "The gmp-devel package is not usable with the architecture."
