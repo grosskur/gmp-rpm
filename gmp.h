@@ -49,6 +49,8 @@ MA 02111-1307, USA. */
 #include "gmp-s390.h"
 #elif defined(__x86_64__)
 #include "gmp-x86_64.h"
+#elif defined(__alpha__)
+#include "gmp-alpha.h"
 #else
 #error "The gmp-devel package is not usable with the architecture."
 #endif
