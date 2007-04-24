@@ -9,7 +9,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.1.4
-Release: 12.2
+Release: 12.3
 URL: http://www.swox.com/gmp/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source1: http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
@@ -118,15 +118,15 @@ cd ..
 cd build-sse2
 export LD_LIBRARY_PATH=`pwd`/.libs
 mkdir $RPM_BUILD_ROOT%{_libdir}/sse2
-install -m 644 .libs/libgmp.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
+install -m 755 .libs/libgmp.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
 cp -a .libs/libgmp.so.3 $RPM_BUILD_ROOT%{_libdir}/sse2
-chmod 644 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmp.so.3
-install -m 644 .libs/libgmpxx.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
+chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmp.so.3
+install -m 755 .libs/libgmpxx.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
 cp -a .libs/libgmpxx.so.3 $RPM_BUILD_ROOT%{_libdir}/sse2
-chmod 644 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmpxx.so.3
-install -m 644 .libs/libmp.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
+chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmpxx.so.3
+install -m 755 .libs/libmp.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
 cp -a .libs/libmp.so.3 $RPM_BUILD_ROOT%{_libdir}/sse2
-chmod 644 $RPM_BUILD_ROOT%{_libdir}/sse2/libmp.so.3
+chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libmp.so.3
 cd ..
 %endif
 cd mpfr-%{mpfr_version}
@@ -208,6 +208,9 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Tue Apr 24 2007 Karsten Hopp <karsten@redhat.com> 4.1.4-12.3
+- fix library permissions
+
 * Wed Mar 14 2007 Karsten Hopp <karsten@redhat.com> 4.1.4-12.2
 - fix typo
 
