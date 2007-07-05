@@ -9,7 +9,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.1.4
-Release: 12.3
+Release: 13
 URL: http://www.swox.com/gmp/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source1: http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
@@ -175,11 +175,13 @@ cd ..
 
 %post devel
 /sbin/install-info %{_infodir}/gmp.info.gz %{_infodir}/dir
+exit 0
 
 %preun devel
 if [ "$1" = 0 ]; then
     /sbin/install-info --delete %{_infodir}/gmp.info.gz %{_infodir}/dir
 fi
+exit 0
 
 %clean
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
@@ -208,6 +210,9 @@ fi
 %{_infodir}/mpfr.info*
 
 %changelog
+* Thu Jul 05 2007 Florian La Roche <laroche@redhat.com> 4.1.4-13
+- don't fail scripts to e.g. allow excludedocs installs
+
 * Tue Apr 24 2007 Karsten Hopp <karsten@redhat.com> 4.1.4-12.3
 - fix library permissions
 
