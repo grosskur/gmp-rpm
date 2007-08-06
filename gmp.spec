@@ -4,23 +4,18 @@
 #
 
 %define configure  CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; ./configure %{_target_platform}  --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --datadir=%{_datadir}  --libdir=%{_libdir} --mandir=%{_mandir}  --infodir=%{_infodir}
-%define mpfr_version 2.2.1
 
 Summary: A GNU arbitrary precision library
 Name: gmp
-Version: 4.1.4
-Release: 13
+Version: 4.2.1
+Release: 1%{dist}
 URL: http://www.swox.com/gmp/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
-Source1: http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
 Source2: gmp.h
 Source3: gmp-mparam.h
 Patch0: gmp-4.0.1-s390.patch
-Patch1: gmp-4.1.2-ppc64.patch
+#Patch1: gmp-4.1.2-ppc64.patch
 Patch2: gmp-4.1.2-autoconf.patch
-Patch3: gmp-4.1.4-fpu.patch
-# http://www.mpfr.org/mpfr-%{mpfr_version}/patches
-#Patch4: mpfr-%{mpfr_version}-cumulative.patch
 License: LGPL 
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -43,7 +38,7 @@ library.
 %package devel
 Summary: Development tools for the GNU MP arbitrary precision library
 Group: Development/Libraries
-Requires: %{name} = %{version}
+Requires: %{name} = %{version}-%{release}
 Requires(post): /sbin/install-info
 Requires(preun): /sbin/install-info
 
@@ -56,19 +51,12 @@ you'll need to install the gmp-devel package.  You'll also need to
 install the gmp package.
 
 %prep
-%setup -q -a1
+%setup -q 
 %patch0 -p1
 #patch1 -p1
 %patch2 -p1
-%patch3 -p1 -b .fpu
-#cd mpfr-%{mpfr_version}
-#%patch4 -p1
-#cd ..
 
 libtoolize --force
-aclocal-1.6 -I mpn -I mpfr
-automake-1.6
-autoconf
 
 %build
 if as --help | grep -q execstack; then
@@ -95,13 +83,6 @@ make %{?_smp_mflags}
 unset CFLAGS
 cd ..
 %endif
-cd mpfr-%{mpfr_version}
-# XXX Apparently mpfr doesn't support separate build dir
-ln -s ../gmp-impl.h ../base/
-ln -s ../longlong.h ../base/
-%configure --disable-assert --with-gmp-build=`cd ../base; pwd`
-make %{?_smp_mflags}
-cd ..
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
@@ -129,12 +110,6 @@ cp -a .libs/libmp.so.3 $RPM_BUILD_ROOT%{_libdir}/sse2
 chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libmp.so.3
 cd ..
 %endif
-cd mpfr-%{mpfr_version}
-make install DESTDIR=$RPM_BUILD_ROOT
-rm -f $RPM_BUILD_ROOT%{_libdir}/libmpfr.la
-install -m 644 ../mpfrxx.h $RPM_BUILD_ROOT%{_includedir}
-rm -f $RPM_BUILD_ROOT%{_infodir}/dir
-cd ..
 
 # Rename gmp.h to gmp-<arch>.h and gmp-mparam.h to gmp-mparam-<arch>.h to 
 # avoid file conflicts on multilib systems and install wrapper include files
@@ -165,9 +140,6 @@ export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags} check
 cd ..
 %endif
-cd mpfr-%{mpfr_version}
-make %{?_smp_mflags} check
-cd ..
 
 %post -p /sbin/ldconfig
 
@@ -204,12 +176,17 @@ exit 0
 %{_libdir}/libmp.a
 %{_libdir}/libgmp.a
 %{_libdir}/libgmpxx.a
-%{_libdir}/libmpfr.a
 %{_includedir}/*.h
 %{_infodir}/gmp.info*
-%{_infodir}/mpfr.info*
 
 %changelog
+* Mon Aug  6 2007 Ivana Varekova <varekova@redhat.com> 4.2.1-1
+- update to 4.2.1
+- do some spec cleanups
+- fix 238794 - gmp-devel depends on {version} but not on 
+  {version}-{release}
+- remove mpfr (moved to separate package)
+
 * Thu Jul 05 2007 Florian La Roche <laroche@redhat.com> 4.1.4-13
 - don't fail scripts to e.g. allow excludedocs installs
 
