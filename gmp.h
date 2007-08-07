@@ -35,7 +35,9 @@ MA 02111-1307, USA. */
 #endif
 #define gmp_wrapper_h
 
-#if defined(__i386__)
+#if defined(__arm__)
+#include "gmp-arm.h"
+#elif defined(__i386__)
 #include "gmp-i386.h"
 #elif defined(__ia64__)
 #include "gmp-ia64.h"

@@ -8,8 +8,8 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.2.1
-Release: 1%{dist}
-URL: http://www.swox.com/gmp/
+Release: 2%{dist}
+URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
 Source3: gmp-mparam.h
@@ -119,6 +119,10 @@ basearch=%{_arch}
 %ifarch %{ix86}
 basearch=i386
 %endif
+# always use arm for arm*
+%ifarch %{arm}
+basearch=arm
+%endif
 # Rename files and install wrappers
 
 mv %{buildroot}/%{_includedir}/gmp.h %{buildroot}/%{_includedir}/gmp-${basearch}.h
@@ -180,6 +184,10 @@ exit 0
 %{_infodir}/gmp.info*
 
 %changelog
+* Tue Aug  7 2007 Ivana Varekova <varekova@redhat.com> 4.2.1-2
+- add arm support (#245456)
+  thanks to Lennert Buytenhek
+
 * Mon Aug  6 2007 Ivana Varekova <varekova@redhat.com> 4.2.1-1
 - update to 4.2.1
 - do some spec cleanups
