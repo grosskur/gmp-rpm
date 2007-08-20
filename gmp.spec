@@ -8,18 +8,17 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.2.1
-Release: 2%{dist}
+Release: 3%{dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
 Source3: gmp-mparam.h
 Patch0: gmp-4.0.1-s390.patch
-#Patch1: gmp-4.1.2-ppc64.patch
 Patch2: gmp-4.1.2-autoconf.patch
 License: LGPL 
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires: automake16 autoconf libtool
+BuildRequires: autoconf libtool
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -53,7 +52,6 @@ install the gmp package.
 %prep
 %setup -q 
 %patch0 -p1
-#patch1 -p1
 %patch2 -p1
 
 libtoolize --force
@@ -85,7 +83,7 @@ cd ..
 %endif
 
 %install
-[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+rm -rf $RPM_BUILD_ROOT
 cd base
 export LD_LIBRARY_PATH=`pwd`/.libs
 make install DESTDIR=$RPM_BUILD_ROOT
@@ -184,6 +182,9 @@ exit 0
 %{_infodir}/gmp.info*
 
 %changelog
+* Mon Aug 20 2007 Ivana Varekova <varekova@redhat.com> 4.2.1-3
+- spec file cleanup (#253439)
+
 * Tue Aug  7 2007 Ivana Varekova <varekova@redhat.com> 4.2.1-2
 - add arm support (#245456)
   thanks to Lennert Buytenhek
