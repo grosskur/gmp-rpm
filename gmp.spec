@@ -7,8 +7,8 @@
 
 Summary: A GNU arbitrary precision library
 Name: gmp
-Version: 4.2.1
-Release: 3%{dist}
+Version: 4.2.2
+Release: 1%{dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
@@ -100,9 +100,9 @@ mkdir $RPM_BUILD_ROOT%{_libdir}/sse2
 install -m 755 .libs/libgmp.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
 cp -a .libs/libgmp.so.3 $RPM_BUILD_ROOT%{_libdir}/sse2
 chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmp.so.3
-install -m 755 .libs/libgmpxx.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
-cp -a .libs/libgmpxx.so.3 $RPM_BUILD_ROOT%{_libdir}/sse2
-chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmpxx.so.3
+install -m 755 .libs/libgmpxx.so.4.* $RPM_BUILD_ROOT%{_libdir}/sse2
+cp -a .libs/libgmpxx.so.4 $RPM_BUILD_ROOT%{_libdir}/sse2
+chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmpxx.so.4
 install -m 755 .libs/libmp.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
 cp -a .libs/libmp.so.3 $RPM_BUILD_ROOT%{_libdir}/sse2
 chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libmp.so.3
@@ -182,6 +182,9 @@ exit 0
 %{_infodir}/gmp.info*
 
 %changelog
+* Wed Sep 19 2007 Ivana Varekova <varekova@redhat.com> 4.2.2-1
+- update to 4.2.2
+
 * Mon Aug 20 2007 Ivana Varekova <varekova@redhat.com> 4.2.1-3
 - spec file cleanup (#253439)
 
