@@ -8,7 +8,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.2.2
-Release: 1%{dist}
+Release: 2%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
@@ -182,6 +182,9 @@ exit 0
 %{_infodir}/gmp.info*
 
 %changelog
+* Thu Sep 20 2007 Ivana Varekova <varekova@redhat.com> 4.2.2-2
+- fix check tag
+
 * Wed Sep 19 2007 Ivana Varekova <varekova@redhat.com> 4.2.2-1
 - update to 4.2.2
 
