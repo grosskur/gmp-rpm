@@ -8,7 +8,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.2.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
@@ -91,7 +91,7 @@ install -m 644 gmp-mparam.h ${RPM_BUILD_ROOT}%{_includedir}
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib{gmp,mp,gmpxx}.la
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 /sbin/ldconfig -n $RPM_BUILD_ROOT%{_libdir}
-ln -sf libgmpxx.so.3 $RPM_BUILD_ROOT%{_libdir}/libgmpxx.so
+ln -sf libgmpxx.so.4 $RPM_BUILD_ROOT%{_libdir}/libgmpxx.so
 cd ..
 %ifarch %{ix86}
 cd build-sse2
@@ -182,6 +182,9 @@ exit 0
 %{_infodir}/gmp.info*
 
 %changelog
+* Mon Sep 24 2007 Ivana Varekova <varekova@redhat.com> 4.2.2-3
+- fix libgmpxx.so link
+
 * Thu Sep 20 2007 Ivana Varekova <varekova@redhat.com> 4.2.2-2
 - fix check tag
 
