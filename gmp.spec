@@ -8,14 +8,14 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.2.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
 Source3: gmp-mparam.h
 Patch0: gmp-4.0.1-s390.patch
 Patch2: gmp-4.1.2-autoconf.patch
-License: LGPL 
+License: LGPLv3+
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: autoconf libtool
@@ -182,6 +182,9 @@ exit 0
 %{_infodir}/gmp.info*
 
 %changelog
+* Thu Feb  7 2008 Ivana Varekova <varekova@redhat.com> 4.2.2-4
+- change license tag
+
 * Mon Sep 24 2007 Ivana Varekova <varekova@redhat.com> 4.2.2-3
 - fix libgmpxx.so link
 
