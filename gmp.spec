@@ -8,7 +8,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.2.2
-Release: 4%{?dist}
+Release: 5%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
@@ -42,12 +42,21 @@ Requires(post): /sbin/install-info
 Requires(preun): /sbin/install-info
 
 %description devel
-The static libraries, header files and documentation for using the GNU
-MP arbitrary precision library in applications.
+The libraries, header files and documentation for using the GNU MP 
+arbitrary precision library in applications.
 
 If you want to develop applications which will use the GNU MP library,
 you'll need to install the gmp-devel package.  You'll also need to
 install the gmp package.
+
+%package static
+Summary: Development tools for the GNU MP arbitrary precision library
+Group: Development/Libraries
+Requires: %{name}-devel = %{version}-%{release}
+
+%description static
+The static libraries for using the GNU MP arbitrary precision library 
+in applications.
 
 %prep
 %setup -q 
@@ -172,16 +181,25 @@ exit 0
 
 %files devel
 %defattr(-,root,root,-)
+%doc README
 %{_libdir}/libmp.so
 %{_libdir}/libgmp.so
 %{_libdir}/libgmpxx.so
-%{_libdir}/libmp.a
-%{_libdir}/libgmp.a
-%{_libdir}/libgmpxx.a
 %{_includedir}/*.h
 %{_infodir}/gmp.info*
 
+%files static
+%defattr(-,root,root,-)
+%doc README
+%{_libdir}/libmp.a
+%{_libdir}/libgmp.a
+%{_libdir}/libgmpxx.a
+
+
 %changelog
+* Fri Feb  8 2008 Ivana Varekova <varekova@redhat.com> 4.2.2-5
+- split the devel subpackage to devel and static parts
+
 * Thu Feb  7 2008 Ivana Varekova <varekova@redhat.com> 4.2.2-4
 - change license tag
 
