@@ -8,13 +8,14 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.2.2
-Release: 5%{?dist}
+Release: 6%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
 Source3: gmp-mparam.h
 Patch0: gmp-4.0.1-s390.patch
 Patch2: gmp-4.1.2-autoconf.patch
+Patch3: gmp-4.2.2-cstdio.patch
 License: LGPLv3+
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -62,6 +63,7 @@ in applications.
 %setup -q 
 %patch0 -p1
 %patch2 -p1
+%patch3 -p1 -b .std
 
 libtoolize --force
 
@@ -197,6 +199,9 @@ exit 0
 
 
 %changelog
+* Wed Feb 13 2008 Ivana varekova <varekova@redhat.com> 4.2.2-6
+- fix gcc-4.3 problem - add <cstdio> (#432336)
+
 * Fri Feb  8 2008 Ivana Varekova <varekova@redhat.com> 4.2.2-5
 - split the devel subpackage to devel and static parts
 
