@@ -53,6 +53,8 @@ MA 02111-1307, USA. */
 #include "gmp-x86_64.h"
 #elif defined(__alpha__)
 #include "gmp-alpha.h"
+#elif defined(__sh__)
+#include "gmp-sh.h"
 #else
 #error "The gmp-devel package is not usable with the architecture."
 #endif

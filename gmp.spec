@@ -8,7 +8,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.2.2
-Release: 6%{?dist}
+Release: 7%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
@@ -132,6 +132,10 @@ basearch=i386
 %ifarch %{arm}
 basearch=arm
 %endif
+# superH architecture support
+%ifarch sh3 sh4
+basearch=sh
+%endif
 # Rename files and install wrappers
 
 mv %{buildroot}/%{_includedir}/gmp.h %{buildroot}/%{_includedir}/gmp-${basearch}.h
@@ -199,6 +203,9 @@ exit 0
 
 
 %changelog
+* Wed Mar 19 2008 Ivana Varekova <varekova@redhat.com> 4.2.2-7
+- add superH support (#437688)
+
 * Wed Feb 13 2008 Ivana varekova <varekova@redhat.com> 4.2.2-6
 - fix gcc-4.3 problem - add <cstdio> (#432336)
 
