@@ -54,6 +54,10 @@ MA 02111-1307, USA. */
 #include "gmp-mparam-alpha.h"
 #elif defined(__sh__)
 #include "gmp-mparam-sh.h"
+#elif defined(__sparc__) && defined (__arch64__)
+#include "gmp-mparam-sparc64.h"
+#elif defined(__sparc__)                      
+#include "gmp-mparam-sparc.h"
 #else
 #error "The gmp-devel package is not usable with the architecture."
 #endif

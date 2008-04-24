@@ -8,7 +8,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.2.2
-Release: 7%{?dist}
+Release: 8%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
@@ -203,6 +203,9 @@ exit 0
 
 
 %changelog
+* Thu Apr 24 2008 Tom "spot" Callaway <tcallawa@redhat.com> 4.2.2-8
+- add sparc/sparc64 support
+
 * Wed Mar 19 2008 Ivana Varekova <varekova@redhat.com> 4.2.2-7
 - add superH support (#437688)
 
