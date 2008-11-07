@@ -8,13 +8,12 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.2.2
-Release: 8%{?dist}
+Release: 9%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
 Source3: gmp-mparam.h
 Patch0: gmp-4.0.1-s390.patch
-Patch2: gmp-4.1.2-autoconf.patch
 Patch3: gmp-4.2.2-cstdio.patch
 License: LGPLv3+
 Group: System Environment/Libraries
@@ -62,7 +61,6 @@ in applications.
 %prep
 %setup -q 
 %patch0 -p1 -b .s390
-%patch2 -p1
 %patch3 -p1 -b .std
 
 libtoolize --force
@@ -203,6 +201,9 @@ exit 0
 
 
 %changelog
+* Fri Nov  7 2008 Ivana Varekova <varekova@redhat.com> 4.2.2-9
+- remove useless patch (#470200)
+
 * Thu Apr 24 2008 Tom "spot" Callaway <tcallawa@redhat.com> 4.2.2-8
 - add sparc/sparc64 support
 
