@@ -8,7 +8,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.2.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
@@ -17,7 +17,7 @@ Patch0: gmp-4.0.1-s390.patch
 License: LGPLv3+
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires: autoconf libtool
+BuildRequires: autoconf automake libtool
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -61,9 +61,8 @@ in applications.
 %setup -q 
 %patch0 -p1 -b .s390
 
-libtoolize --force
-
 %build
+autoreconf -if
 if as --help | grep -q execstack; then
   # the object files do not require an executable stack
   export CCAS="gcc -c -Wa,--noexecstack"
@@ -199,6 +198,9 @@ exit 0
 
 
 %changelog
+* Wed Dec  3 2008 Stepan Kasal <skasal@redhat.com> 4.2.4-2
+- Run full autoreconf, add automake to BuildRequires.
+
 * Mon Nov 10 2008 Ivana Varekova <varekova@redhat.com> 4.2.4-1
 - update to 4.2.4
 
