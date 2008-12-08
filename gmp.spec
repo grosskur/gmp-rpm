@@ -8,7 +8,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.2.4
-Release: 2%{?dist}
+Release: 3%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
@@ -70,7 +70,7 @@ fi
 mkdir base
 cd base
 ln -s ../configure .
-%configure --enable-mpbsd --disable-mpfr --enable-cxx
+%configure --enable-mpbsd --enable-cxx
 perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
 export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags}
@@ -80,7 +80,7 @@ mkdir build-sse2
 cd build-sse2
 ln -s ../configure .
 CFLAGS="%{optflags} -march=pentium4"
-%configure --enable-mpbsd --disable-mpfr --enable-cxx pentium4-redhat-linux
+%configure --enable-mpbsd --enable-cxx pentium4-redhat-linux
 perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
 export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags}
@@ -198,6 +198,9 @@ exit 0
 
 
 %changelog
+* Mon Dec  8 2008 Ivana Varekova <varekova@redhat.com> 4.2.4-3
+- remove useless option (#475073)
+
 * Wed Dec  3 2008 Stepan Kasal <skasal@redhat.com> 4.2.4-2
 - Run full autoreconf, add automake to BuildRequires.
 
