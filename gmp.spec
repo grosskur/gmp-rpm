@@ -3,12 +3,10 @@
 # This rpm has to be build on a CPU with sse2 support like Pentium 4 !
 #
 
-%define configure  CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; ./configure %{_target_platform}  --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --datadir=%{_datadir}  --libdir=%{_libdir} --mandir=%{_mandir}  --infodir=%{_infodir}
-
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.2.4
-Release: 3%{?dist}
+Release: 4%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
@@ -80,7 +78,7 @@ mkdir build-sse2
 cd build-sse2
 ln -s ../configure .
 CFLAGS="%{optflags} -march=pentium4"
-%configure --enable-mpbsd --enable-cxx pentium4-redhat-linux
+%configure --enable-mpbsd --enable-cxx
 perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
 export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags}
@@ -162,13 +160,13 @@ cd ..
 exit 0
 
 %preun devel
-if [ "$1" = 0 ]; then
+if [ $1 = 0 ]; then
     /sbin/install-info --delete %{_infodir}/gmp.info.gz %{_infodir}/dir
 fi
 exit 0
 
 %clean
-[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
@@ -198,6 +196,9 @@ exit 0
 
 
 %changelog
+* Tue Dec 23 2008 Ivana Varekova <varekova@redhat.com> 4.2.4-4
+- fix spec file
+
 * Mon Dec  8 2008 Ivana Varekova <varekova@redhat.com> 4.2.4-3
 - remove useless option (#475073)
 
