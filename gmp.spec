@@ -6,12 +6,13 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.2.4
-Release: 5%{?dist}
+Release: 6%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
 Source3: gmp-mparam.h
 Patch0: gmp-4.0.1-s390.patch
+Patch1: gmp-4.2.4-no-host-target-check.patch
 License: LGPLv3+
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -58,6 +59,7 @@ in applications.
 %prep
 %setup -q 
 %patch0 -p1 -b .s390
+%patch1 -p1 -b .no-host-target
 
 %build
 autoreconf -if
@@ -196,6 +198,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Apr 09 2009 Dennis Gilmore <dennis@ausil.us> - 4.2.4-6
+- no check that --host and --target are the same when building i586  or sparcv9 they are not
+
 * Tue Feb 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.2.4-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
