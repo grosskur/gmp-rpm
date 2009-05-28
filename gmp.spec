@@ -5,14 +5,14 @@
 
 Summary: A GNU arbitrary precision library
 Name: gmp
-Version: 4.2.4
-Release: 6%{?dist}
+Version: 4.3.1
+Release: 1%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
 Source3: gmp-mparam.h
 Patch0: gmp-4.0.1-s390.patch
-Patch1: gmp-4.2.4-no-host-target-check.patch
+#Patch1: gmp-4.2.4-no-host-target-check.patch
 License: LGPLv3+
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -59,7 +59,7 @@ in applications.
 %prep
 %setup -q 
 %patch0 -p1 -b .s390
-%patch1 -p1 -b .no-host-target
+#%patch1 -p1 -b .no-host-target
 
 %build
 autoreconf -if
@@ -70,7 +70,22 @@ fi
 mkdir base
 cd base
 ln -s ../configure .
-%configure --enable-mpbsd --enable-cxx
+./configure --build=%{_build} --host=%{_host} \
+         --program-prefix=%{?_program_prefix} \
+         --prefix=%{_prefix} \
+         --exec-prefix=%{_exec_prefix} \
+         --bindir=%{_bindir} \
+         --sbindir=%{_sbindir} \
+         --sysconfdir=%{_sysconfdir} \
+         --datadir=%{_datadir} \
+         --includedir=%{_includedir} \
+         --libdir=%{_libdir} \
+         --libexecdir=%{_libexecdir} \
+         --localstatedir=%{_localstatedir} \
+         --sharedstatedir=%{_sharedstatedir} \
+         --mandir=%{_mandir} \
+         --infodir=%{_infodir} \
+         --enable-mpbsd --enable-cxx
 perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
 export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags}
@@ -80,7 +95,22 @@ mkdir build-sse2
 cd build-sse2
 ln -s ../configure .
 CFLAGS="%{optflags} -march=pentium4"
-%configure --enable-mpbsd --enable-cxx
+./configure --build=%{_build} --host=%{_host} \
+         --program-prefix=%{?_program_prefix} \
+         --prefix=%{_prefix} \
+         --exec-prefix=%{_exec_prefix} \
+         --bindir=%{_bindir} \
+         --sbindir=%{_sbindir} \
+         --sysconfdir=%{_sysconfdir} \
+         --datadir=%{_datadir} \
+         --includedir=%{_includedir} \
+         --libdir=%{_libdir} \
+         --libexecdir=%{_libexecdir} \
+         --localstatedir=%{_localstatedir} \
+         --sharedstatedir=%{_sharedstatedir} \
+         --mandir=%{_mandir} \
+         --infodir=%{_infodir} \
+         --enable-mpbsd --enable-cxx
 perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
 export LD_LIBRARY_PATH=`pwd`/.libs
 make %{?_smp_mflags}
@@ -198,6 +228,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu May 28 2009 Ivana Varekova <varekova@redhat.com> 4.3.1-1
+- update to 4.3.1
+- remove configure macro (built problem)
+
 * Thu Apr 09 2009 Dennis Gilmore <dennis@ausil.us> - 4.2.4-6
 - no check that --host and --target are the same when building i586  or sparcv9 they are not
 
