@@ -6,7 +6,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.3.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
@@ -88,7 +88,7 @@ ln -s ../configure .
          --enable-mpbsd --enable-cxx
 perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
 export LD_LIBRARY_PATH=`pwd`/.libs
-make %{?_smp_mflags}
+make CFLAGS="$RPM_OPT_FLAGS" %{?_smp_mflags}
 cd ..
 %ifarch %{ix86}
 mkdir build-sse2
@@ -228,6 +228,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jun 15 2009 Ivana Varekova <varekova@redhat.com> 4.3.1-2
+- Resolves: #505592
+  add RPM_OPT_FLAGS
+
 * Thu May 28 2009 Ivana Varekova <varekova@redhat.com> 4.3.1-1
 - update to 4.3.1
 - remove configure macro (built problem)
