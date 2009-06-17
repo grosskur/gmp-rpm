@@ -6,7 +6,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.3.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
@@ -228,6 +228,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jun 17 2009 Ivana Varekova <varekova@redhat.com> 4.3.1-3
+- rebuild
+
 * Mon Jun 15 2009 Ivana Varekova <varekova@redhat.com> 4.3.1-2
 - Resolves: #505592
   add RPM_OPT_FLAGS
