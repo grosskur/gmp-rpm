@@ -6,7 +6,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.3.1
-Release: 4%{?dist}
+Release: 5%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
@@ -188,12 +188,16 @@ cd ..
 %postun -p /sbin/ldconfig
 
 %post devel
-/sbin/install-info %{_infodir}/gmp.info.gz %{_infodir}/dir
+if [ -f %{_infodir}/gmp.info.gz ]; then
+    /sbin/install-info %{_infodir}/gmp.info.gz %{_infodir}/dir || :
+fi
 exit 0
 
 %preun devel
 if [ $1 = 0 ]; then
-    /sbin/install-info --delete %{_infodir}/gmp.info.gz %{_infodir}/dir
+    if [ -f %{_infodir}/gmp.info.gz ]; then
+        /sbin/install-info --delete %{_infodir}/gmp.info.gz %{_infodir}/dir || :
+    fi
 fi
 exit 0
 
@@ -228,6 +232,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Aug 10 2009 Ivana Varekova <varekova@redhat.com> 4.3.1-5
+- fix installation with --excludedocs option (#515947)
+
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.3.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
