@@ -6,7 +6,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.3.1
-Release: 5%{?dist}
+Release: 6%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
@@ -17,8 +17,6 @@ License: LGPLv3+
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: autoconf automake libtool
-Requires(post): /sbin/ldconfig
-Requires(postun): /sbin/ldconfig
 
 %description
 The gmp package contains GNU MP, a library for arbitrary precision
@@ -216,7 +214,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(-,root,root,-)
-%doc README
 %{_libdir}/libmp.so
 %{_libdir}/libgmp.so
 %{_libdir}/libgmpxx.so
@@ -225,13 +222,17 @@ rm -rf $RPM_BUILD_ROOT
 
 %files static
 %defattr(-,root,root,-)
-%doc README
 %{_libdir}/libmp.a
 %{_libdir}/libgmp.a
 %{_libdir}/libgmpxx.a
 
 
 %changelog
+* Fri Nov 27 2009 Ivana Hutarova Varekova <varekova@redhat.com> 4.3.1-6
+- remove unnecessary dependences
+  remove duplicated documentation
+  
+
 * Mon Aug 10 2009 Ivana Varekova <varekova@redhat.com> 4.3.1-5
 - fix installation with --excludedocs option (#515947)
 
