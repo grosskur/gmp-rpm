@@ -6,14 +6,15 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.3.1
-Release: 6%{?dist}
+Release: 7%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
 Source3: gmp-mparam.h
 Patch0: gmp-4.0.1-s390.patch
-#Patch1: gmp-4.2.4-no-host-target-check.patch
-License: LGPLv3+
+# mpn/s390x/gmp-mparam.h: LGPLv2+
+# demos/calc/calc.c: GPLv3+
+License: LGPLv2+ and  GPLv3+ and LGPLv3+
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: autoconf automake libtool
@@ -57,7 +58,6 @@ in applications.
 %prep
 %setup -q 
 %patch0 -p1 -b .s390
-#%patch1 -p1 -b .no-host-target
 
 %build
 autoreconf -if
@@ -228,10 +228,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Mar  2 2010 Ivana Hutarova Varekova <varekova@redhat.com> 4.3.1-7
+- fix the license tag
+
 * Fri Nov 27 2009 Ivana Hutarova Varekova <varekova@redhat.com> 4.3.1-6
 - remove unnecessary dependences
   remove duplicated documentation
-  
 
 * Mon Aug 10 2009 Ivana Varekova <varekova@redhat.com> 4.3.1-5
 - fix installation with --excludedocs option (#515947)
