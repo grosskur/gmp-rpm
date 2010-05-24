@@ -5,13 +5,13 @@
 
 Summary: A GNU arbitrary precision library
 Name: gmp
-Version: 4.3.1
-Release: 7%{?dist}
+Version: 5.0.1
+Release: 1%{?dist}
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
 Source3: gmp-mparam.h
-Patch0: gmp-4.0.1-s390.patch
+Patch0: gmp-5.0.1-s390.patch
 # mpn/s390x/gmp-mparam.h: LGPLv2+
 # demos/calc/calc.c: GPLv3+
 License: LGPLv2+ and  GPLv3+ and LGPLv3+
@@ -131,15 +131,15 @@ cd ..
 cd build-sse2
 export LD_LIBRARY_PATH=`pwd`/.libs
 mkdir $RPM_BUILD_ROOT%{_libdir}/sse2
-install -m 755 .libs/libgmp.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
-cp -a .libs/libgmp.so.3 $RPM_BUILD_ROOT%{_libdir}/sse2
-chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmp.so.3
-install -m 755 .libs/libgmpxx.so.4.* $RPM_BUILD_ROOT%{_libdir}/sse2
-cp -a .libs/libgmpxx.so.4 $RPM_BUILD_ROOT%{_libdir}/sse2
-chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmpxx.so.4
-install -m 755 .libs/libmp.so.3.* $RPM_BUILD_ROOT%{_libdir}/sse2
-cp -a .libs/libmp.so.3 $RPM_BUILD_ROOT%{_libdir}/sse2
-chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libmp.so.3
+install -m 755 .libs/libgmp.so.*.* $RPM_BUILD_ROOT%{_libdir}/sse2
+cp -a .libs/libgmp.so.[^.]* $RPM_BUILD_ROOT%{_libdir}/sse2
+chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmp.so.[^.]*
+install -m 755 .libs/libgmpxx.so.*.* $RPM_BUILD_ROOT%{_libdir}/sse2
+cp -a .libs/libgmpxx.so.? $RPM_BUILD_ROOT%{_libdir}/sse2
+chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmpxx.so.?
+install -m 755 .libs/libmp.so.*.* $RPM_BUILD_ROOT%{_libdir}/sse2
+cp -a .libs/libmp.so.? $RPM_BUILD_ROOT%{_libdir}/sse2
+chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libmp.so.?
 cd ..
 %endif
 
@@ -228,6 +228,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon May 24 2010 Ivana Hutarova Varekova <varekova@redhat.com> 5.0.1-1
+- update to 5.0.1
+
 * Tue Mar  2 2010 Ivana Hutarova Varekova <varekova@redhat.com> 4.3.1-7
 - fix the license tag
 
