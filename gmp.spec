@@ -6,7 +6,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.3.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
@@ -33,7 +33,7 @@ library.
 %package devel
 Summary: Development tools for the GNU MP arbitrary precision library
 Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
+Requires: %{name} = %{epoch}:%{version}-%{release}
 Requires(post): /sbin/install-info
 Requires(preun): /sbin/install-info
 
@@ -48,7 +48,7 @@ install the gmp package.
 %package static
 Summary: Development tools for the GNU MP arbitrary precision library
 Group: Development/Libraries
-Requires: %{name}-devel = %{version}-%{release}
+Requires: %{name}-devel = %{epoch}:%{version}-%{release}
 
 %description static
 The static libraries for using the GNU MP arbitrary precision library 
@@ -227,6 +227,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Nov 24 2010 Ivana Hutarova Varekova <varekova@redhat.com> 1:4.3.2-2
+- fix Requires tag
+
 * Wed Nov 24 2010 Ivana Hutarova Varekova <varekova@redhat.com> 1:4.3.2-1
 - downgrade from 5.0.1 to 4.3.2
 
