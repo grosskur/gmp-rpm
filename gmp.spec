@@ -5,16 +5,15 @@
 
 Summary: A GNU arbitrary precision library
 Name: gmp
-Version: 5.0.1
+Version: 4.3.2
 Release: 1%{?dist}
+Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
 Source3: gmp-mparam.h
-Patch0: gmp-5.0.1-s390.patch
-# mpn/s390x/gmp-mparam.h: LGPLv2+
-# demos/calc/calc.c: GPLv3+
-License: LGPLv2+ and  GPLv3+ and LGPLv3+
+Patch0: gmp-4.0.1-s390.patch
+License: LGPLv3+
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: autoconf automake libtool
@@ -56,7 +55,7 @@ The static libraries for using the GNU MP arbitrary precision library
 in applications.
 
 %prep
-%setup -q 
+%setup -q
 %patch0 -p1 -b .s390
 
 %build
@@ -228,6 +227,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Nov 24 2010 Ivana Hutarova Varekova <varekova@redhat.com> 1:4.3.2-1
+- downgrade from 5.0.1 to 4.3.2
+
 * Mon May 24 2010 Ivana Hutarova Varekova <varekova@redhat.com> 5.0.1-1
 - update to 5.0.1
 
