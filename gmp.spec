@@ -6,7 +6,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 4.3.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
@@ -91,7 +91,7 @@ cd ..
 mkdir build-sse2
 cd build-sse2
 ln -s ../configure .
-CFLAGS="%{optflags} -march=pentium4"
+CFLAGS="$RPM_OPT_FLAGS -march=pentium4"
 ./configure --build=%{_build} --host=%{_host} \
          --program-prefix=%{?_program_prefix} \
          --prefix=%{_prefix} \
@@ -110,7 +110,7 @@ CFLAGS="%{optflags} -march=pentium4"
          --enable-mpbsd --enable-cxx
 perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
 export LD_LIBRARY_PATH=`pwd`/.libs
-make %{?_smp_mflags}
+make CFLAGS="$RPM_OPT_FLAGS -march=pentium4" %{?_smp_mflags}
 unset CFLAGS
 cd ..
 %endif
@@ -227,6 +227,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jun 13 2011 Ivana Hutarova Varekova <varekova@redhat.com> 1:4.3.2-4
+- Resolves: #706374
+  fix sse2/libgmp.so.3.5.2 debuginfo data
+
 * Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:4.3.2-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
