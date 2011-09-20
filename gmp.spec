@@ -1,12 +1,12 @@
 #
-# Important for %{ix86}:
+# Important for %%{ix86}:
 # This rpm has to be build on a CPU with sse2 support like Pentium 4 !
 #
 
 Summary: A GNU arbitrary precision library
 Name: gmp
-Version: 4.3.2
-Release: 4%{?dist}
+Version: 5.0.2
+Release: 1%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
@@ -83,7 +83,10 @@ ln -s ../configure .
          --mandir=%{_mandir} \
          --infodir=%{_infodir} \
          --enable-mpbsd --enable-cxx
-perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
+sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
+    -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
+    -e 's|-lstdc++ -lm|-lstdc++|' \
+    -i libtool
 export LD_LIBRARY_PATH=`pwd`/.libs
 make CFLAGS="$RPM_OPT_FLAGS" %{?_smp_mflags}
 cd ..
@@ -108,7 +111,10 @@ CFLAGS="$RPM_OPT_FLAGS -march=pentium4"
          --mandir=%{_mandir} \
          --infodir=%{_infodir} \
          --enable-mpbsd --enable-cxx
-perl -pi -e 's|hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=\"-L\\\$libdir\"|g;' libtool
+sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
+    -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
+    -e 's|-lstdc++ -lm|-lstdc++|' \
+    -i libtool
 export LD_LIBRARY_PATH=`pwd`/.libs
 make CFLAGS="$RPM_OPT_FLAGS -march=pentium4" %{?_smp_mflags}
 unset CFLAGS
@@ -227,6 +233,13 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Sep 20 2011 Peter Schiffer <pschiffe@redhat.com> 1:5.0.2-1
+- resolves: #702919
+  update to 5.0.2
+- resolves: #738091
+  removed unused direct shlib dependency on libm
+  updated license in gmp.h and gmp-mparam.h files
+
 * Mon Jun 13 2011 Ivana Hutarova Varekova <varekova@redhat.com> 1:4.3.2-4
 - Resolves: #706374
   fix sse2/libgmp.so.3.5.2 debuginfo data
