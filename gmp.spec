@@ -6,7 +6,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 5.0.2
-Release: 2%{?dist}
+Release: 2%{?dist}.1
 Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
@@ -19,6 +19,7 @@ License: LGPLv3+
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: autoconf automake libtool
+Requires: %{name}-compat = %{epoch}:%{version}-%{release}
 
 %description
 The gmp package contains GNU MP, a library for arbitrary precision
@@ -55,6 +56,14 @@ Requires: %{name}-devel = %{epoch}:%{version}-%{release}
 %description static
 The static libraries for using the GNU MP arbitrary precision library 
 in applications.
+
+%package compat
+Summary: Compatibility subpackage.
+Group: Development/Libraries
+Requires: %{name} = %{epoch}:%{version}-%{release}
+
+%description compat
+Compatibility subpackage.
 
 %prep
 %setup -q
@@ -284,7 +293,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %doc COPYING COPYING.LIB NEWS README
-%{_libdir}/libgmp.so.*
+%{_libdir}/libgmp.so.10*
 %{_libdir}/libmp.so.*
 %{_libdir}/libgmpxx.so.*
 %ifarch %{ix86}
@@ -304,6 +313,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libmp.a
 %{_libdir}/libgmp.a
 %{_libdir}/libgmpxx.a
+
+%files compat
+%defattr(-,root,root,-)
+%{_libdir}/libgmp.so.3*
 
 
 %changelog
