@@ -6,7 +6,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 5.0.2
-Release: 2%{?dist}.2
+Release: 2%{?dist}.3
 Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
@@ -61,7 +61,11 @@ in applications.
 Summary: Compatibility subpackage.
 Group: Development/Libraries
 Requires: %{name} = %{epoch}:%{version}-%{release}
+%ifarch x86_64
+Provides: libgmp.so.3()(64bit)
+%else
 Provides: libgmp.so.3
+%endif
 
 %description compat
 Compatibility subpackage.
