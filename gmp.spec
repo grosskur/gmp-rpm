@@ -6,20 +6,17 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 5.0.2
-Release: 2%{?dist}.3
+Release: 3%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
 Source2: gmp.h
 Source3: gmp-mparam.h
-Source4: gmp-4.3.2.tar.bz2
 Patch0: gmp-4.0.1-s390.patch
-Patch1: gmp-4.0.1-s390-old.patch
 License: LGPLv3+
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: autoconf automake libtool
-Requires: %{name}-compat = %{epoch}:%{version}-%{release}
 
 %description
 The gmp package contains GNU MP, a library for arbitrary precision
@@ -57,94 +54,11 @@ Requires: %{name}-devel = %{epoch}:%{version}-%{release}
 The static libraries for using the GNU MP arbitrary precision library 
 in applications.
 
-%package compat
-Summary: Compatibility subpackage.
-Group: Development/Libraries
-Requires: %{name} = %{epoch}:%{version}-%{release}
-%ifarch x86_64
-Provides: libgmp.so.3()(64bit)
-%else
-Provides: libgmp.so.3
-%endif
-
-%description compat
-Compatibility subpackage.
-
 %prep
 %setup -q
 %patch0 -p1 -b .s390
-cd ..
-rm -rf gmp-4.3.2
-tar xjf %SOURCE4
-cd gmp-4.3.2
-/bin/chmod -Rf a+rX,u+w,g-w,o-w .
-%patch1 -p1 -b .s390
 
 %build
-autoreconf -if
-if as --help | grep -q execstack; then
-  # the object files do not require an executable stack
-  export CCAS="gcc -c -Wa,--noexecstack"
-fi
-mkdir base
-cd base
-ln -s ../configure .
-./configure --build=%{_build} --host=%{_host} \
-         --program-prefix=%{?_program_prefix} \
-         --prefix=%{_prefix} \
-         --exec-prefix=%{_exec_prefix} \
-         --bindir=%{_bindir} \
-         --sbindir=%{_sbindir} \
-         --sysconfdir=%{_sysconfdir} \
-         --datadir=%{_datadir} \
-         --includedir=%{_includedir} \
-         --libdir=%{_libdir} \
-         --libexecdir=%{_libexecdir} \
-         --localstatedir=%{_localstatedir} \
-         --sharedstatedir=%{_sharedstatedir} \
-         --mandir=%{_mandir} \
-         --infodir=%{_infodir} \
-         --enable-mpbsd --enable-cxx
-sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
-    -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
-    -e 's|-lstdc++ -lm|-lstdc++|' \
-    -i libtool
-export LD_LIBRARY_PATH=`pwd`/.libs
-make CFLAGS="$RPM_OPT_FLAGS" %{?_smp_mflags}
-cd ..
-%ifarch %{ix86}
-mkdir build-sse2
-cd build-sse2
-ln -s ../configure .
-CFLAGS="$RPM_OPT_FLAGS -march=pentium4"
-./configure --build=%{_build} --host=%{_host} \
-         --program-prefix=%{?_program_prefix} \
-         --prefix=%{_prefix} \
-         --exec-prefix=%{_exec_prefix} \
-         --bindir=%{_bindir} \
-         --sbindir=%{_sbindir} \
-         --sysconfdir=%{_sysconfdir} \
-         --datadir=%{_datadir} \
-         --includedir=%{_includedir} \
-         --libdir=%{_libdir} \
-         --libexecdir=%{_libexecdir} \
-         --localstatedir=%{_localstatedir} \
-         --sharedstatedir=%{_sharedstatedir} \
-         --mandir=%{_mandir} \
-         --infodir=%{_infodir} \
-         --enable-mpbsd --enable-cxx
-sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
-    -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
-    -e 's|-lstdc++ -lm|-lstdc++|' \
-    -i libtool
-export LD_LIBRARY_PATH=`pwd`/.libs
-make CFLAGS="$RPM_OPT_FLAGS -march=pentium4" %{?_smp_mflags}
-unset CFLAGS
-cd ..
-%endif
-###################
-cd ..
-cd gmp-4.3.2
 autoreconf -if
 if as --help | grep -q execstack; then
   # the object files do not require an executable stack
@@ -217,8 +131,6 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/lib{gmp,mp,gmpxx}.la
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 /sbin/ldconfig -n $RPM_BUILD_ROOT%{_libdir}
 ln -sf libgmpxx.so.4 $RPM_BUILD_ROOT%{_libdir}/libgmpxx.so
-install -m 644 ../../gmp-4.3.2/base/.libs/libgmp.so.3.5.2 ${RPM_BUILD_ROOT}%{_libdir}
-ln -sf libgmp.so.3.5.2 $RPM_BUILD_ROOT%{_libdir}/libgmp.so.3
 cd ..
 %ifarch %{ix86}
 cd build-sse2
@@ -298,7 +210,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %doc COPYING COPYING.LIB NEWS README
-%{_libdir}/libgmp.so.10*
+%{_libdir}/libgmp.so.*
 %{_libdir}/libmp.so.*
 %{_libdir}/libgmpxx.so.*
 %ifarch %{ix86}
@@ -319,12 +231,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libgmp.a
 %{_libdir}/libgmpxx.a
 
-%files compat
-%defattr(-,root,root,-)
-%{_libdir}/libgmp.so.3*
-
 
 %changelog
+* Fri Oct 14 2011 Peter Schiffer <pschiffe@redhat.com> 1:5.0.2-3
+- removed old compatibility library
+
 * Mon Sep 26 2011 Peter Schiffer <pschiffe@redhat.com> 1:5.0.2-2
 - temporary build wild old compatibility library version
 
