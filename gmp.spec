@@ -6,7 +6,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 5.0.2
-Release: 4%{?dist}
+Release: 5%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
@@ -67,6 +67,9 @@ fi
 mkdir base
 cd base
 ln -s ../configure .
+%ifarch %{ix86}
+export CFLAGS=$(echo $RPM_OPT_FLAGS | sed -e "s/-mtune=[^ ]*//g" | sed -e "s/-march=[^ ]*//g")" -march=i686"
+%endif
 ./configure --build=%{_build} --host=%{_host} \
          --program-prefix=%{?_program_prefix} \
          --prefix=%{_prefix} \
@@ -94,7 +97,7 @@ cd ..
 mkdir build-sse2
 cd build-sse2
 ln -s ../configure .
-CFLAGS="$RPM_OPT_FLAGS -march=pentium4"
+export CFLAGS=$(echo $RPM_OPT_FLAGS | sed -e "s/-mtune=[^ ]*//g" | sed -e "s/-march=[^ ]*//g")" -march=pentium4"
 ./configure --build=%{_build} --host=%{_host} \
          --program-prefix=%{?_program_prefix} \
          --prefix=%{_prefix} \
@@ -116,7 +119,7 @@ sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
     -e 's|-lstdc++ -lm|-lstdc++|' \
     -i libtool
 export LD_LIBRARY_PATH=`pwd`/.libs
-make CFLAGS="$RPM_OPT_FLAGS -march=pentium4" %{?_smp_mflags}
+make %{?_smp_mflags}
 unset CFLAGS
 cd ..
 %endif
@@ -233,6 +236,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jan 19 2012 Peter Schiffer <pschiffe@redhat.com> 1:5.0.2-5
+- fixed FTBFS with gcc 4.7 on 32bit arch
+
 * Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:5.0.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
