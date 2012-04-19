@@ -5,8 +5,8 @@
 
 Summary: A GNU arbitrary precision library
 Name: gmp
-Version: 5.0.2
-Release: 6%{?dist}
+Version: 5.0.4
+Release: 1%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.bz2
@@ -236,6 +236,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Apr 19 2012 Peter Schiffer <pschiffe@redhat.com> 1:5.0.4-1
+- resolves: #785116
+  update to 5.0.4
+
 * Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:5.0.2-6
 - Rebuilt for c++ ABI breakage
 
