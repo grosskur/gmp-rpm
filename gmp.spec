@@ -6,13 +6,14 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 5.0.5
-Release: 2%{?dist}
+Release: 3%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.xz
 Source2: gmp.h
 Source3: gmp-mparam.h
 Patch0: gmp-4.0.1-s390.patch
+Patch1: gmp-5.0.5-de-ansi-fication.patch
 License: LGPLv3+
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -57,6 +58,7 @@ in applications.
 %prep
 %setup -q
 %patch0 -p1 -b .s390
+%patch01 -p1 -b .de-ansi
 
 %build
 autoreconf -if
@@ -236,6 +238,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jul 20 2012 Peter Schiffer <pschiffe@redhat.com> 1:5.0.5-3
+- fixed FTBFS
+
 * Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:5.0.5-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
