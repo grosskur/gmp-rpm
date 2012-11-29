@@ -6,7 +6,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 5.0.5
-Release: 3%{?dist}
+Release: 5%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.xz
@@ -58,7 +58,7 @@ in applications.
 %prep
 %setup -q
 %patch0 -p1 -b .s390
-%patch01 -p1 -b .de-ansi
+%patch1 -p1 -b .de-ansi
 
 %build
 autoreconf -if
@@ -127,7 +127,6 @@ cd ..
 %endif
 
 %install
-rm -rf $RPM_BUILD_ROOT
 cd base
 export LD_LIBRARY_PATH=`pwd`/.libs
 make install DESTDIR=$RPM_BUILD_ROOT
@@ -209,9 +208,6 @@ if [ $1 = 0 ]; then
 fi
 exit 0
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 %defattr(-,root,root,-)
 %doc COPYING COPYING.LIB NEWS README
@@ -238,6 +234,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Nov 23 2012 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:5.0.5-5
+- minor spec cleanup
+
 * Fri Jul 20 2012 Peter Schiffer <pschiffe@redhat.com> 1:5.0.5-3
 - fixed FTBFS
 
