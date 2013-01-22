@@ -6,7 +6,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 5.0.5
-Release: 5%{?dist}
+Release: 6%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.xz
@@ -234,6 +234,9 @@ exit 0
 
 
 %changelog
+* Tue Jan 22 2013 Peter Robinson <pbrobinson@fedoraproject.org> 1:5.0.5-6
+- Rebuild against new binutils to fix FTBFS on ARM
+
 * Fri Nov 23 2012 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:5.0.5-5
 - minor spec cleanup
 
