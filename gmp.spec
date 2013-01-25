@@ -86,7 +86,7 @@ export CFLAGS=$(echo $RPM_OPT_FLAGS | sed -e "s/-mtune=[^ ]*//g" | sed -e "s/-ma
          --sharedstatedir=%{_sharedstatedir} \
          --mandir=%{_mandir} \
          --infodir=%{_infodir} \
-         --enable-mpbsd --enable-cxx
+         --enable-cxx
 sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
     -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
     -e 's|-lstdc++ -lm|-lstdc++|' \
@@ -114,7 +114,7 @@ export CFLAGS=$(echo $RPM_OPT_FLAGS | sed -e "s/-mtune=[^ ]*//g" | sed -e "s/-ma
          --sharedstatedir=%{_sharedstatedir} \
          --mandir=%{_mandir} \
          --infodir=%{_infodir} \
-         --enable-mpbsd --enable-cxx
+         --enable-cxx
 sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
     -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
     -e 's|-lstdc++ -lm|-lstdc++|' \
@@ -145,9 +145,6 @@ chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmp.so.[^.]*
 install -m 755 .libs/libgmpxx.so.*.* $RPM_BUILD_ROOT%{_libdir}/sse2
 cp -a .libs/libgmpxx.so.? $RPM_BUILD_ROOT%{_libdir}/sse2
 chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libgmpxx.so.?
-install -m 755 .libs/libmp.so.*.* $RPM_BUILD_ROOT%{_libdir}/sse2
-cp -a .libs/libmp.so.? $RPM_BUILD_ROOT%{_libdir}/sse2
-chmod 755 $RPM_BUILD_ROOT%{_libdir}/sse2/libmp.so.?
 cd ..
 %endif
 
@@ -211,7 +208,6 @@ exit 0
 %defattr(-,root,root,-)
 %doc COPYING COPYING.LIB NEWS README
 %{_libdir}/libgmp.so.*
-%{_libdir}/libmp.so.*
 %{_libdir}/libgmpxx.so.*
 %ifarch %{ix86}
 %{_libdir}/sse2/*
@@ -219,7 +215,6 @@ exit 0
 
 %files devel
 %defattr(-,root,root,-)
-%{_libdir}/libmp.so
 %{_libdir}/libgmp.so
 %{_libdir}/libgmpxx.so
 %{_includedir}/*.h
@@ -227,7 +222,6 @@ exit 0
 
 %files static
 %defattr(-,root,root,-)
-%{_libdir}/libmp.a
 %{_libdir}/libgmp.a
 %{_libdir}/libgmpxx.a
 
@@ -235,6 +229,7 @@ exit 0
 %changelog
 * Fri Jan 25 2013 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:5.1.0-1
 - rebase to 5.1.0, de-ansi patch no longer applicable
+- upstream dropped libmp.so (bsdmp-like interface)
 - silenced bogus date in changelog
 
 * Tue Jan 22 2013 Peter Robinson <pbrobinson@fedoraproject.org> 1:5.0.5-6
