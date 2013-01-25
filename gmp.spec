@@ -235,6 +235,7 @@ exit 0
 %changelog
 * Fri Jan 25 2013 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:5.1.0-1
 - rebase to 5.1.0, de-ansi patch no longer applicable
+- silenced bogus date in changelog
 
 * Tue Jan 22 2013 Peter Robinson <pbrobinson@fedoraproject.org> 1:5.0.5-6
 - Rebuild against new binutils to fix FTBFS on ARM
@@ -614,7 +615,7 @@ correctly identified as a 64 bit platform.
 * Wed Sep  2 1998 Michael Fulbright <msf@redhat.com>
 - looked over before inclusion in RH 5.2
 
-* Sat May 24 1998 Dick Porter <dick@cymru.net>
+* Sun May 24 1998 Dick Porter <dick@cymru.net>
 - Patch Makefile.in, not Makefile
 - Don't specify i586, let configure decide the arch
 
