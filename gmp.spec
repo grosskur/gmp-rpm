@@ -13,7 +13,7 @@ Source0: ftp://ftp.gmplib.org/pub/gmp-%{version}/gmp-%{version}.tar.bz2
 # or ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.xz
 Source2: gmp.h
 Source3: gmp-mparam.h
-Patch0: gmp-4.0.1-s390.patch
+#No longer applicable Patch0: gmp-4.0.1-s390.patch
 License: LGPLv3+
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -57,7 +57,7 @@ in applications.
 
 %prep
 %setup -q
-%patch0 -p1 -b .s390
+#no longer applicable % patch0 -p1 -b .s390
 
 %build
 autoreconf -if
@@ -229,6 +229,7 @@ exit 0
 %changelog
 * Thu Feb 14 2013 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:5.1.1-1
 - rebase to 5.1.1
+- dropped unapplicable gmp-4.0.1-s390.patch
 
 * Fri Jan 25 2013 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:5.1.0-1
 - rebase to 5.1.0, de-ansi patch no longer applicable
