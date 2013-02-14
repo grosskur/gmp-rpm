@@ -5,7 +5,7 @@
 
 Summary: A GNU arbitrary precision library
 Name: gmp
-Version: 5.1.0
+Version: 5.1.1
 Release: 1%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
@@ -227,6 +227,9 @@ exit 0
 
 
 %changelog
+* Thu Feb 14 2013 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:5.1.1-1
+- rebase to 5.1.1
+
 * Fri Jan 25 2013 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:5.1.0-1
 - rebase to 5.1.0, de-ansi patch no longer applicable
 - upstream dropped libmp.so (bsdmp-like interface)
