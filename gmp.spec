@@ -6,7 +6,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 5.1.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gmplib.org/pub/gmp-%{version}/gmp-%{version}.tar.bz2
@@ -18,6 +18,8 @@ License: LGPLv3+
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: autoconf automake libtool
+#autoreconf on arm needs:
+BuildRequires: perl-Carp
 
 %description
 The gmp package contains GNU MP, a library for arbitrary precision
@@ -227,6 +229,9 @@ exit 0
 
 
 %changelog
+* Thu Mar 28 2013 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:5.1.1-3
+- added build dependency needed to autoreconf on arm
+
 * Thu Feb 14 2013 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:5.1.1-2
 - rebase to 5.1.1
 - deleted unapplicable part of gmp-4.0.1-s390.patch
