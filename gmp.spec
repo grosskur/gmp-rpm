@@ -60,7 +60,7 @@ in applications.
 %patch0 -p1 -b .s390
 
 %build
-autoreconf -if
+autoreconf -ifv
 if as --help | grep -q execstack; then
   # the object files do not require an executable stack
   export CCAS="gcc -c -Wa,--noexecstack"
