@@ -6,7 +6,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 5.1.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gmplib.org/pub/gmp-%{version}/gmp-%{version}.tar.bz2
@@ -229,6 +229,9 @@ exit 0
 
 
 %changelog
+* Wed Nov 06 2013 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:5.1.3-2
+- support for aarch64
+
 * Wed Nov 06 2013 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:5.1.3-1
 - rebase to 5.1.3
 
