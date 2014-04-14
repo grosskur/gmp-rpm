@@ -5,11 +5,11 @@
 
 Summary: A GNU arbitrary precision library
 Name: gmp
-Version: 5.1.3
-Release: 2%{?dist}
+Version: 6.0.0
+Release: 1%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
-Source0: ftp://ftp.gmplib.org/pub/gmp-%{version}/gmp-%{version}.tar.bz2
+Source0: ftp://ftp.gmplib.org/pub/gmp-%{version}/gmp-%{version}a.tar.bz2
 # or ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.xz
 Source2: gmp.h
 Source3: gmp-mparam.h
@@ -208,7 +208,7 @@ exit 0
 
 %files
 %defattr(-,root,root,-)
-%doc COPYING COPYING.LIB NEWS README
+%doc COPYING COPYING.LESSERv3 COPYINGv2 COPYINGv3 NEWS README
 %{_libdir}/libgmp.so.*
 %{_libdir}/libgmpxx.so.*
 %ifarch %{ix86}
