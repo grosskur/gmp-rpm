@@ -6,7 +6,7 @@
 Summary: A GNU arbitrary precision library
 Name: gmp
 Version: 6.0.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
 Source0: ftp://ftp.gmplib.org/pub/gmp-%{version}/gmp-%{version}a.tar.bz2
@@ -229,7 +229,7 @@ exit 0
 
 
 %changelog
-* Mon Apr 14 2014 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:6.0.0-1
+* Mon Apr 14 2014 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:6.0.0-2
 - rebase
 
 * Wed Nov 06 2013 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:5.1.3-2
