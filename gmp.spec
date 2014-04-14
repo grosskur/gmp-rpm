@@ -229,6 +229,9 @@ exit 0
 
 
 %changelog
+* Mon Apr 14 2014 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:6.0.0-1
+- rebase
+
 * Wed Nov 06 2013 Frantisek Kluknavsky <fkluknav@redhat.com> - 1:5.1.3-2
 - support for aarch64
 
