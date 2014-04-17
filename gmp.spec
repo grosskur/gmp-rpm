@@ -3,8 +3,10 @@
 # This rpm has to be build on a CPU with sse2 support like Pentium 4 !
 #
 
+%global real_name gmp
+
 Summary: A GNU arbitrary precision library
-Name: gmp
+Name: %{real_name}60
 Version: 6.0.0
 Release: 2%{?dist}
 Epoch: 1
@@ -62,7 +64,7 @@ The static libraries for using the GNU MP arbitrary precision library
 in applications.
 
 %prep
-%setup -q
+%setup -q -n %{real_name}-%{version}
 %patch0 -p1 -b .s390
 
 %build
