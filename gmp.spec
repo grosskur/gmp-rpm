@@ -9,7 +9,7 @@ Version: 6.0.0
 Release: 2%{?dist}
 Epoch: 1
 URL: http://gmplib.org/
-Source0: ftp://ftp.gmplib.org/pub/gmp-%{version}/gmp-%{version}a.tar.bz2
+Source0: https://gmplib.org/download/gmp/gmp-%{version}a.tar.bz2
 # or ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.xz
 Source2: gmp.h
 Source3: gmp-mparam.h
