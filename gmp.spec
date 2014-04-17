@@ -19,7 +19,11 @@ Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: autoconf automake libtool
 #autoreconf on arm needs:
+%if 0%{?rhel} && 0%{?rhel} < 7
+BuildRequires: perl
+%else
 BuildRequires: perl-Carp
+%endif
 
 %description
 The gmp package contains GNU MP, a library for arbitrary precision
